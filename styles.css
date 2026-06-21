@@ -1,0 +1,93 @@
+* {
+  font-family: "JetBrains Mono", monospace;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  background-color: #f0f0f0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+main {
+  background-color: #fff;
+  width: 80rem;
+  height: 45rem;
+  display: grid;
+  grid-template-rows: 6rem 1fr 6rem;
+}
+
+.content {
+  border: 0 solid #d8d8d8;
+  padding: 2rem 0;
+  border-width: 2px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.text-box {
+  width: 36rem;
+  height: 9rem;
+  border: 2px solid #d8d8d8;
+  border-radius: 0.875rem;
+}
+
+.keyboard {
+  font-size: 0.7rem;
+  width: 50.25em;
+  height: 22.5em;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+
+.key-row {
+  flex: 1;
+  display: flex;
+  gap: 0.45em;
+}
+
+.key {
+  display: flex;
+  flex-direction: column;
+  font-size: 1.25em;
+  justify-content: center;
+  align-items: center;
+  border: 1.5px solid #000;
+  flex: 1;
+  border-radius: 0.35em;
+}
+
+.key.dual-char > span {
+  font-size: 0.8em;
+}
+
+.key.modifier-key {
+  font-size: 1.15em;
+}
+
+.key.tab-key,
+.key.enter-key,
+.key.backspace-key {
+  flex: 0 0 5.5em;
+}
+
+.key.backspace-key {
+  font-size: 1.25em;
+}
+
+.key.shift-key {
+  flex: 0 0 7.5em;
+}
+
+.key.caps-key,
+.key.control-key,
+.key.option-key {
+  flex: 0 0 6em;
+}
