@@ -68,26 +68,24 @@ main {
   font-size: 0.8em;
 }
 
-.key.modifier-key {
+.modkey-sm,
+.modkey-md,
+.modkey-lg {
   font-size: 1.15em;
 }
 
-.key.tab-key,
-.key.enter-key,
-.key.backspace-key {
-  flex: 0 0 5.5em;
+.modkey-sm {
+  flex: 0 0 5em;
+}
+
+.modkey-md {
+  flex: 0 0 6em;
+}
+
+.modkey-lg {
+  flex: 0 0 7.5em;
 }
 
 .key.backspace-key {
   font-size: 1.25em;
-}
-
-.key.shift-key {
-  flex: 0 0 7.5em;
-}
-
-.key.caps-key,
-.key.control-key,
-.key.option-key {
-  flex: 0 0 6em;
 }
