@@ -66,6 +66,7 @@ main {
 
 .key.dual-char > span {
   font-size: 0.8em;
+  color: rgba(0, 0, 0, 0.65);
 }
 
 .modkey-sm,
@@ -86,6 +87,32 @@ main {
   flex: 0 0 7.5em;
 }
 
-.key.backspace-key {
+.backspace-key {
   font-size: 1.25em;
+}
+
+.active {
+  color: #fff;
+  background-color: #00f;
+}
+
+.shift-down .alphabet {
+  text-transform: uppercase;
+}
+
+.shift-down .dual-char {
+  color: rgb(0, 0, 0, 0.65);
+}
+
+.shift-down .dual-char span {
+  color: #000;
+  font-size: 0.9em;
+}
+
+.shift-down .active.dual-char {
+  color: #000;
+}
+
+.shift-down .active.dual-char span {
+  color: #fff;
 }
