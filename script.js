@@ -1,29 +1,45 @@
 const keyRows = document.querySelectorAll(".key-row");
+let capsLockActive = false;
 
 function getKeys(e) {
-  let keyText = CSS.escape(e.key.toLocaleLowerCase());
-  let dataValue = `[data-normal-value='${keyText}'], [data-shift-value='${keyText}']`;
-  return document.querySelectorAll(dataValue);
+  const keyText = CSS.escape(e.key.toLowerCase());
+  const elements = document.querySelectorAll(
+    `[data-normal-value='${keyText}'], [data-shift-value='${keyText}']`,
+  );
+  return { keyText, elements };
 }
 
 document.addEventListener("keydown", (e) => {
-  const keys = getKeys(e);
-  if (keys.length) {
-    e.preventDefault();
+  const { keyText, elements: keys } = getKeys(e);
+  if (!keys.length) return;
+
+  e.preventDefault();
+
+  if (keyText === "shift") {
+    keyRows.forEach((row) => row.classList.add("shift-down"));
+  }
+
+  if (keyText === "capslock") {
+    capsLockActive = !capsLockActive;
+    keyRows.forEach((row) =>
+      row.classList.toggle("capslock-down", capsLockActive),
+    );
+    keys.forEach((key) => key.classList.toggle("active", capsLockActive));
+  } else {
     keys.forEach((key) => key.classList.add("active"));
-    if (e.key.toLocaleLowerCase() === "shift") {
-      keyRows.forEach((row) => row.classList.add("shift-down"));
-    }
   }
 });
 
 document.addEventListener("keyup", (e) => {
-  const keys = getKeys(e);
-  if (keys.length) {
-    e.preventDefault();
+  const { keyText, elements: keys } = getKeys(e);
+  if (!keys.length) return;
+
+  e.preventDefault();
+
+  if (keyText !== "capslock") {
     keys.forEach((key) => key.classList.remove("active"));
-    if (e.key.toLocaleLowerCase() === "shift") {
-      keyRows.forEach((row) => row.classList.remove("shift-down"));
-    }
+  }
+  if (keyText === "shift") {
+    keyRows.forEach((row) => row.classList.remove("shift-down"));
   }
 });
