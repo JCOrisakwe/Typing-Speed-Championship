@@ -96,6 +96,7 @@ main {
   background-color: #00f;
 }
 
+.capslock-down .alphabet,
 .shift-down .alphabet {
   text-transform: uppercase;
 }
