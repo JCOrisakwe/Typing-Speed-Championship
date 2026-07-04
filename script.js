@@ -1,41 +1,55 @@
-// TEXT BOX LAYOUT AND FUNCTIONALITY
-const indicators = document.querySelector(".validity-indicators");
-const promptContainer = document.querySelector(".prompt-container");
-let roundOver = false;
-let charIndex = 0;
+const prompt = `Molestiae consequuntur explicabo, vel at minus mollitia autem impedit alias
+  voluptas totam similique nihil temporibus aut. Quae veritatis ut iusto sequi, ad
+  sint provident aliquid facere expedita delectus magnam blanditiis
+  perspiciatis culpa harum laborum illo excepturi! Neque sunt incidunt omnis iste.`;
 
-const getBottomDistance = (el) => el.getBoundingClientRect().bottom;
-const pcBottomDistance = getBottomDistance(promptContainer);
-const pcLineHeight = Number(
-  getComputedStyle(promptContainer).lineHeight.replace("px", ""),
+// TEXT BOX LAYOUT AND FUNCTIONALITY
+
+// populate text box whith character spans
+const textBox = document.querySelector(".text-box");
+for (let char of prompt) {
+  const charEl = document.createElement("span");
+  charEl.append(char);
+  textBox.append(charEl);
+}
+
+// create highlighting variables & functions
+const getBottom = (el) => el.getBoundingClientRect().bottom;
+const textBoxBottom = getBottom(textBox);
+let currCharIdx = 0;
+const textBoxLineHeight = Number(
+  getComputedStyle(textBox).lineHeight.replace("px", ""),
 );
 
 document.addEventListener("keydown", (e) => {
-  if (e.key.length === 1 && !roundOver) {
-    // adding validity indicator
-    const indicator = document.createElement("span");
-    indicator.textContent = "!";
-
-    if (promptContainer.innerText[charIndex] === e.key) {
-      indicator.classList.add("correct-char");
+  if (e.key.length === 1 && currCharIdx < textBox.children.length) {
+    // add character hightlight
+    const currentEl = textBox.children[currCharIdx];
+    if (e.key === currentEl.innerText) {
+      currentEl.classList.add("correct-char");
     } else {
-      indicator.classList.add("wrong-char");
+      currentEl.classList.add("wrong-char");
     }
-    indicators.append(indicator);
-    charIndex += 1;
-    roundOver = indicators.children.length >= promptContainer.innerText.length;
+    currCharIdx += 1;
 
     // textbox scroll down mechanism
-    if (getBottomDistance(indicator) > pcBottomDistance) {
-      indicators.scrollTop += pcLineHeight;
+    if (getBottom(currentEl) > textBoxBottom) {
+      textBox.scrollTop += textBoxLineHeight;
     }
-    // removing validity indicator
   } else if (e.key.toLowerCase() === "backspace") {
-    const lastIndicator = indicators.children[indicators.children.length - 1];
-    if (lastIndicator) lastIndicator.remove();
-    charIndex = Math.max(0, charIndex - 1);
+    // remove character highlight
+    let prevElemIdx = Math.max(0, currCharIdx - 1);
+    const prevEl = textBox.children[prevElemIdx];
+    if (prevEl) {
+      prevEl.classList.remove("correct-char", "wrong-char");
+      currCharIdx = prevElemIdx;
+    }
+
+    // textbox scroll up mechanism
+    if (textBoxBottom - getBottom(prevEl) >= textBoxLineHeight) {
+      textBox.scrollTop -= textBoxLineHeight;
+    }
   }
-  promptContainer.scrollTop = indicators.scrollTop;
 });
 
 // KEYBOARD LAYOUT AND FUNCTIONALITY
