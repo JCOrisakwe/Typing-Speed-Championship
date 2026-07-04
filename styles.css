@@ -34,8 +34,38 @@ main {
 .text-box {
   width: 36rem;
   height: 9rem;
+  font-size: 1rem;
+  position: relative;
   border: 2px solid #d8d8d8;
   border-radius: 0.875rem;
+}
+
+.text-box > div {
+  width: 100%;
+  height: 100%;
+  line-height: 1.9em;
+  padding: 0.7em;
+  overflow-y: auto;
+  overflow-wrap: break-word;
+  scrollbar-width: none;
+}
+
+.text-box > .prompt-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.wrong-char,
+.correct-char {
+  padding: 5px 0;
+  color: #adff2fbf;
+  background-color: #adff2fbf;
+}
+
+.wrong-char {
+  color: #f08080;
+  background-color: #f08080;
 }
 
 .keyboard {
@@ -66,7 +96,7 @@ main {
 
 .key.dual-char > span {
   font-size: 0.8em;
-  color: rgba(0, 0, 0, 0.65);
+  color: #000000a6;
 }
 
 .modkey-sm,
@@ -102,7 +132,7 @@ main {
 }
 
 .shift-down .dual-char {
-  color: rgb(0, 0, 0, 0.65);
+  color: #000000a6;
 }
 
 .shift-down .dual-char span {
