@@ -3,6 +3,26 @@ const prompt = `Molestiae consequuntur explicabo, vel at minus mollitia autem im
   sint provident aliquid facere expedita delectus magnam blanditiis
   perspiciatis culpa harum laborum illo excepturi! Neque sunt incidunt omnis iste.`;
 
+let roundDuration = 10; // in minutes
+let remainingSeconds = roundDuration * 60;
+
+// COUNTDOWN TIMER
+const to2digits = (num) => String(num).padStart(2, "0");
+const timerEl = document.querySelector("[data-function='timer']");
+
+const updateDisplay = () => {
+  const mins = Math.floor(remainingSeconds / 60);
+  const secs = remainingSeconds % 60;
+  timerEl.textContent = `${to2digits(mins)}:${to2digits(secs)}`;
+};
+
+updateDisplay();
+
+const timerInterval = setInterval(() => {
+  remainingSeconds -= 1;
+  updateDisplay();
+}, 1000);
+
 // TEXT BOX LAYOUT AND FUNCTIONALITY
 
 // populate text box whith character spans
