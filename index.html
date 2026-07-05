@@ -6,10 +6,15 @@
     <title>Typing Test</title>
     <link rel="stylesheet" href="./styles.css" />
 
+    <!-- icon packs -->
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
     />
+    <script
+      src="https://kit.fontawesome.com/e3ba811d50.js"
+      crossorigin="anonymous"
+    ></script>
 
     <!-- JetBrains Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -21,7 +26,21 @@
   </head>
   <body>
     <main>
-      <div></div>
+      <div class="top">
+        <div>
+          <i class="fa-solid fa-clock icon"></i
+          ><span data-function="timer"></span>
+        </div>
+        <div>
+          <i class="fa-solid fa-spell-check icon"></i
+          ><span data-function="accuracy">98%</span>
+        </div>
+        <div>
+          <i class="fa-solid fa-gauge-high icon"></i
+          ><span data-function="wpm">27WPM</span>
+        </div>
+        <button aria-label="close"><i class="fa-solid fa-xmark"></i></button>
+      </div>
       <div class="content">
         <div class="text-box"></div>
         <div class="keyboard">
@@ -217,7 +236,7 @@
           </div>
         </div>
       </div>
-      <div></div>
+      <div class="bottom"><button>reset</button></div>
     </main>
     <script src="./script.js"></script>
   </body>
