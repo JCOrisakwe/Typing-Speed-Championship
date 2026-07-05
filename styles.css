@@ -3,6 +3,8 @@
   box-sizing: border-box;
   padding: 0;
   margin: 0;
+  border: none;
+  background: none;
 }
 
 body {
@@ -19,6 +21,33 @@ main {
   height: 45rem;
   display: grid;
   grid-template-rows: 6rem 1fr 6rem;
+}
+
+.top {
+  display: flex;
+  color: #000000a6;
+  padding: 0 3.5rem;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.top > div {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.top .icon {
+  font-size: 1.25em;
+}
+
+.top .fa-xmark {
+  color: #000000a6;
+}
+
+.top .fa-xmark:hover {
+  cursor: pointer;
+  color: #000;
 }
 
 .content {
@@ -129,4 +158,20 @@ main {
 
 .shift-down .active.dual-char span {
   color: #fff;
+}
+
+.bottom {
+  display: flex;
+  padding: 0 3.5rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.bottom > button {
+  color: #fff;
+  width: 160px;
+  height: 48px;
+  border-radius: 12px;
+  text-transform: uppercase;
+  background-color: #00f;
 }
