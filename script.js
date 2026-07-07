@@ -5,6 +5,8 @@ const prompt = `Molestiae consequuntur explicabo, vel at minus mollitia autem im
 
 let roundDuration = 10; // in minutes
 let remainingSeconds = roundDuration * 60;
+let validKeystrokes = 0;
+let correctKeystrokes = 0;
 
 // COUNTDOWN TIMER
 const to2digits = (num) => String(num).padStart(2, "0");
@@ -16,11 +18,26 @@ const updateDisplay = () => {
   timerEl.textContent = `${to2digits(mins)}:${to2digits(secs)}`;
 };
 
+const wpmEl = document.querySelector("[data-function='wpm']");
+const updateWPM = () => {
+  let elapseMinutes = roundDuration - remainingSeconds / 60;
+  let grossWPM = Math.round(validKeystrokes / (5 * elapseMinutes));
+  wpmEl.textContent = grossWPM || 0;
+};
+
+const accuracyEl = document.querySelector("[data-function='accuracy']");
+const UpdateAccuracy = () => {
+  accuracyEl.textContent =
+    Math.round((correctKeystrokes / validKeystrokes) * 100) || 0;
+};
+
 updateDisplay();
 
 const timerInterval = setInterval(() => {
   remainingSeconds -= 1;
   updateDisplay();
+  updateWPM();
+  UpdateAccuracy();
 }, 1000);
 
 // TEXT BOX LAYOUT AND FUNCTIONALITY
@@ -47,10 +64,12 @@ document.addEventListener("keydown", (e) => {
     const currentEl = textBox.children[currCharIdx];
     if (e.key === currentEl.innerText) {
       currentEl.classList.add("correct-char");
+      correctKeystrokes += 1;
     } else {
       currentEl.classList.add("wrong-char");
     }
     currCharIdx += 1;
+    validKeystrokes += 1;
 
     // textbox scroll down mechanism
     if (getBottom(currentEl) > textBoxBottom) {
