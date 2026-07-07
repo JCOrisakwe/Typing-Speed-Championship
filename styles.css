@@ -26,6 +26,7 @@ main {
 .top {
   display: flex;
   color: #000000a6;
+  text-transform: uppercase;
   padding: 0 3.5rem;
   justify-content: space-between;
   align-items: center;
@@ -35,6 +36,7 @@ main {
   display: flex;
   align-items: center;
   gap: 0.5em;
+  min-width: 100px;
 }
 
 .top .icon {
@@ -73,11 +75,11 @@ main {
 }
 
 .correct-char {
-  background-color: #adff2fbf;
+  color: #16a34a;
 }
 
 .wrong-char {
-  background-color: #f08080;
+  color: #ef4444;
 }
 
 .keyboard {
