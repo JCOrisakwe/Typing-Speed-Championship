@@ -1,3 +1,5 @@
+//test.js
+
 // INITIALIZE GLOBAL VARIABLES & FUNCTIONS
 const roundDuration = 10; // in minutes
 let remainingSeconds = roundDuration * 60;
@@ -106,7 +108,7 @@ function handleTypingKeydown(e) {
     currCharIdx += 1;
     updateAccuracy();
 
-    if (getBottom(currentEl) > textBoxBottom) {
+    if (getBottom(caret) > textBoxBottom) {
       textBox.scrollTop += textBoxLineHeight;
     }
   } else if (e.key.toLowerCase() === "backspace") {

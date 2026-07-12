@@ -1,21 +1,13 @@
-* {
-  font-family: "JetBrains Mono", monospace;
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-  border: none;
-  background: none;
-}
+/* test.css */
 
-body {
+.test-screen {
   background-color: #f0f0f0;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
 }
 
-main {
+.test-screen__body {
   background-color: #fff;
   width: 80rem;
   height: 45rem;
@@ -23,7 +15,7 @@ main {
   grid-template-rows: 6rem 1fr 6rem;
 }
 
-.top {
+.test-screen__header {
   display: flex;
   color: #000000a6;
   text-transform: uppercase;
@@ -32,27 +24,27 @@ main {
   align-items: center;
 }
 
-.top > div {
+.test-screen__header > div {
   display: flex;
   align-items: center;
   gap: 0.5em;
   min-width: 6.25em;
 }
 
-.top .icon {
+.test-screen__header .icon {
   font-size: 1.25em;
 }
 
-.top .fa-xmark {
+.test-screen__header .fa-xmark {
   color: #000000a6;
 }
 
-.top .fa-xmark:hover {
+.test-screen__header .fa-xmark:hover {
   cursor: pointer;
   color: #000;
 }
 
-.content {
+.test-screen__main {
   border: 0 solid #d8d8d8;
   padding: 2rem 0;
   border-width: 2px 0;
@@ -181,14 +173,14 @@ main {
   color: #fff;
 }
 
-.bottom {
+.test-screen__footer {
   display: flex;
   padding: 0 3.5rem;
   align-items: center;
   justify-content: center;
 }
 
-.bottom > button {
+.test-screen__footer > button {
   color: #fff;
   width: 12em;
   height: 3.6em;
