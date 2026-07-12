@@ -36,7 +36,7 @@ main {
   display: flex;
   align-items: center;
   gap: 0.5em;
-  min-width: 100px;
+  min-width: 6.25em;
 }
 
 .top .icon {
@@ -65,13 +65,31 @@ main {
 .text-box {
   width: 36rem;
   height: 9rem;
-  padding: 0.7em;
-  font-size: 1rem;
+  padding: 0.45em 0.8em;
+  font-size: 1.075rem;
   line-height: 1.9em;
   border: 2px solid #d8d8d8;
   border-radius: 0.875rem;
   overflow-y: auto;
   scrollbar-width: none;
+  overflow-wrap: break-word;
+}
+
+.text-box .char {
+  position: relative;
+}
+
+.text-box .word {
+  white-space: nowrap;
+}
+
+.caret {
+  width: 2px;
+  height: 1.5em;
+  background-color: #00f;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .correct-char {
@@ -80,6 +98,11 @@ main {
 
 .wrong-char {
   color: #ef4444;
+}
+
+.wrong-space {
+  background-color: #ef444480;
+  border-radius: 0.15em;
 }
 
 .keyboard {
@@ -131,11 +154,7 @@ main {
   flex: 0 0 7.5em;
 }
 
-.backspace-key {
-  font-size: 1.25em;
-}
-
-.active {
+.active-key {
   color: #fff;
   background-color: #00f;
 }
@@ -154,11 +173,11 @@ main {
   font-size: 0.9em;
 }
 
-.shift-down .active.dual-char {
+.shift-down .active-key.dual-char {
   color: #000;
 }
 
-.shift-down .active.dual-char span {
+.shift-down .active-key.dual-char span {
   color: #fff;
 }
 
@@ -171,9 +190,9 @@ main {
 
 .bottom > button {
   color: #fff;
-  width: 160px;
-  height: 48px;
-  border-radius: 12px;
+  width: 12em;
+  height: 3.6em;
+  border-radius: 0.9em;
   text-transform: uppercase;
   background-color: #00f;
 }
