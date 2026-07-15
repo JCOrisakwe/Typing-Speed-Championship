@@ -1,5 +1,3 @@
-<!-- index.html -->
-
 <!doctype html>
 <html lang="en">
   <head>
@@ -7,19 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Typing Test</title>
 
-    <link rel="stylesheet" href="css/home.css" />
+    <link rel="stylesheet" href="css/index.css" />
     <link rel="stylesheet" href="css/test.css" />
-    <link rel="stylesheet" href="css/results.css" />
+    <link rel="stylesheet" href="css/stats.css" />
 
     <!-- icon packs -->
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
     />
-    <script
-      src="https://kit.fontawesome.com/e3ba811d50.js"
-      crossorigin="anonymous"
-    ></script>
 
     <!-- JetBrains Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -40,212 +34,212 @@
           <div class="test-screen__header">
             <div>
               <i class="fa-solid fa-clock icon"></i
-              ><span data-function="timer"></span>
+              ><span data-stat="time-left"></span>
             </div>
             <div>
               <i class="fa-solid fa-spell-check icon"></i
-              ><span data-function="accuracy"></span>%
+              ><span data-stat="accuracy"></span>%
             </div>
             <div>
               <i class="fa-solid fa-gauge-high icon"></i
-              ><span data-function="wpm"></span>wpm
+              ><span data-stat="wpm"></span>wpm
             </div>
             <button aria-label="close">
-              <i class="fa-solid fa-xmark"></i>
+              <i class="fa-solid fa-xmark close-icon"></i>
             </button>
           </div>
           <div class="test-screen__main">
             <div class="text-box"></div>
-            <div class="keyboard">
+            <div class="keyboard" aria-hidden="true">
               <div class="key-row">
-                <div class="key" data-normal-value="`">`</div>
+                <div class="key" data-key-value-1="`">`</div>
                 <div
                   class="key dual-char"
-                  data-normal-value="1"
-                  data-shift-value="!"
+                  data-key-value-1="1"
+                  data-key-value-2="!"
                 >
                   <span>!</span>1
                 </div>
                 <div
                   class="key dual-char"
-                  data-normal-value="2"
-                  data-shift-value="@"
+                  data-key-value-1="2"
+                  data-key-value-2="@"
                 >
                   <span>@</span>2
                 </div>
                 <div
                   class="key dual-char"
-                  data-normal-value="3"
-                  data-shift-value="£"
+                  data-key-value-1="3"
+                  data-key-value-2="£"
                 >
                   <span>£</span>3
                 </div>
                 <div
                   class="key dual-char"
-                  data-normal-value="4"
-                  data-shift-value="$"
+                  data-key-value-1="4"
+                  data-key-value-2="$"
                 >
                   <span>$</span>4
                 </div>
                 <div
                   class="key dual-char"
-                  data-normal-value="5"
-                  data-shift-value="%"
+                  data-key-value-1="5"
+                  data-key-value-2="%"
                 >
                   <span>%</span>5
                 </div>
                 <div
                   class="key dual-char"
-                  data-normal-value="6"
-                  data-shift-value="^"
+                  data-key-value-1="6"
+                  data-key-value-2="^"
                 >
                   <span>^</span>6
                 </div>
                 <div
                   class="key dual-char"
-                  data-normal-value="7"
-                  data-shift-value="&"
+                  data-key-value-1="7"
+                  data-key-value-2="&"
                 >
                   <span>&amp;</span>7
                 </div>
                 <div
                   class="key dual-char"
-                  data-normal-value="8"
-                  data-shift-value="*"
+                  data-key-value-1="8"
+                  data-key-value-2="*"
                 >
                   <span>*</span>8
                 </div>
                 <div
                   class="key dual-char"
-                  data-normal-value="9"
-                  data-shift-value="("
+                  data-key-value-1="9"
+                  data-key-value-2="("
                 >
                   <span>(</span>9
                 </div>
                 <div
                   class="key dual-char"
-                  data-normal-value="0"
-                  data-shift-value=")"
+                  data-key-value-1="0"
+                  data-key-value-2=")"
                 >
                   <span>)</span>0
                 </div>
                 <div
                   class="key dual-char"
-                  data-normal-value="-"
-                  data-shift-value="_"
+                  data-key-value-1="-"
+                  data-key-value-2="_"
                 >
                   <span>_</span>-
                 </div>
                 <div
                   class="key dual-char"
-                  data-normal-value="="
-                  data-shift-value="+"
+                  data-key-value-1="="
+                  data-key-value-2="+"
                 >
                   <span>+</span>=
                 </div>
-                <div class="key modkey-sm" data-normal-value="backspace">
+                <div class="key modkey-sm" data-key-value-1="backspace">
                   <i class="bi bi-backspace"></i>
                 </div>
               </div>
               <div class="key-row">
-                <div class="key modkey-sm" data-normal-value="tab">tab</div>
-                <div class="key alphabet" data-normal-value="q">q</div>
-                <div class="key alphabet" data-normal-value="w">w</div>
-                <div class="key alphabet" data-normal-value="e">e</div>
-                <div class="key alphabet" data-normal-value="r">r</div>
-                <div class="key alphabet" data-normal-value="t">t</div>
-                <div class="key alphabet" data-normal-value="y">y</div>
-                <div class="key alphabet" data-normal-value="u">u</div>
-                <div class="key alphabet" data-normal-value="i">i</div>
-                <div class="key alphabet" data-normal-value="o">o</div>
-                <div class="key alphabet" data-normal-value="p">p</div>
+                <div class="key modkey-sm" data-key-value-1="tab">tab</div>
+                <div class="key alphabet" data-key-value-1="q">q</div>
+                <div class="key alphabet" data-key-value-1="w">w</div>
+                <div class="key alphabet" data-key-value-1="e">e</div>
+                <div class="key alphabet" data-key-value-1="r">r</div>
+                <div class="key alphabet" data-key-value-1="t">t</div>
+                <div class="key alphabet" data-key-value-1="y">y</div>
+                <div class="key alphabet" data-key-value-1="u">u</div>
+                <div class="key alphabet" data-key-value-1="i">i</div>
+                <div class="key alphabet" data-key-value-1="o">o</div>
+                <div class="key alphabet" data-key-value-1="p">p</div>
                 <div
                   class="key dual-char"
-                  data-normal-value="["
-                  data-shift-value="{"
+                  data-key-value-1="["
+                  data-key-value-2="{"
                 >
                   <span>{</span>[
                 </div>
                 <div
                   class="key dual-char"
-                  data-normal-value="]"
-                  data-shift-value="}"
+                  data-key-value-1="]"
+                  data-key-value-2="}"
                 >
                   <span>}</span>]
                 </div>
                 <div
                   class="key dual-char"
-                  data-normal-value="\"
-                  data-shift-value="|"
+                  data-key-value-1="\"
+                  data-key-value-2="|"
                 >
                   <span>|</span>\
                 </div>
               </div>
               <div class="key-row">
-                <div class="key modkey-md" data-normal-value="capslock">
+                <div class="key modkey-md" data-key-value-1="capslock">
                   caps
                 </div>
-                <div class="key alphabet" data-normal-value="a">a</div>
-                <div class="key alphabet" data-normal-value="s">s</div>
-                <div class="key alphabet" data-normal-value="d">d</div>
-                <div class="key alphabet" data-normal-value="f">f</div>
-                <div class="key alphabet" data-normal-value="g">g</div>
-                <div class="key alphabet" data-normal-value="h">h</div>
-                <div class="key alphabet" data-normal-value="j">j</div>
-                <div class="key alphabet" data-normal-value="k">k</div>
-                <div class="key alphabet" data-normal-value="l">l</div>
+                <div class="key alphabet" data-key-value-1="a">a</div>
+                <div class="key alphabet" data-key-value-1="s">s</div>
+                <div class="key alphabet" data-key-value-1="d">d</div>
+                <div class="key alphabet" data-key-value-1="f">f</div>
+                <div class="key alphabet" data-key-value-1="g">g</div>
+                <div class="key alphabet" data-key-value-1="h">h</div>
+                <div class="key alphabet" data-key-value-1="j">j</div>
+                <div class="key alphabet" data-key-value-1="k">k</div>
+                <div class="key alphabet" data-key-value-1="l">l</div>
                 <div
                   class="key dual-char"
-                  data-normal-value=";"
-                  data-shift-value=":"
+                  data-key-value-1=";"
+                  data-key-value-2=":"
                 >
                   <span>:</span>;
                 </div>
                 <div
                   class="key dual-char"
-                  data-normal-value="'"
-                  data-shift-value='"'
+                  data-key-value-1="'"
+                  data-key-value-2='"'
                 >
                   <span>"</span>'
                 </div>
-                <div class="key modkey-sm" data-normal-value="enter">enter</div>
+                <div class="key modkey-sm" data-key-value-1="enter">enter</div>
               </div>
               <div class="key-row">
-                <div class="key modkey-lg" data-normal-value="shift">shift</div>
-                <div class="key alphabet" data-normal-value="z">z</div>
-                <div class="key alphabet" data-normal-value="x">x</div>
-                <div class="key alphabet" data-normal-value="c">c</div>
-                <div class="key alphabet" data-normal-value="v">v</div>
-                <div class="key alphabet" data-normal-value="b">b</div>
-                <div class="key alphabet" data-normal-value="n">n</div>
-                <div class="key alphabet" data-normal-value="m">m</div>
+                <div class="key modkey-lg" data-key-value-1="shift">shift</div>
+                <div class="key alphabet" data-key-value-1="z">z</div>
+                <div class="key alphabet" data-key-value-1="x">x</div>
+                <div class="key alphabet" data-key-value-1="c">c</div>
+                <div class="key alphabet" data-key-value-1="v">v</div>
+                <div class="key alphabet" data-key-value-1="b">b</div>
+                <div class="key alphabet" data-key-value-1="n">n</div>
+                <div class="key alphabet" data-key-value-1="m">m</div>
                 <div
                   class="key dual-char"
-                  data-normal-value=","
-                  data-shift-value="<"
+                  data-key-value-1=","
+                  data-key-value-2="<"
                 >
                   <span>&lt;</span>,
                 </div>
                 <div
                   class="key dual-char"
-                  data-normal-value="."
-                  data-shift-value=">"
+                  data-key-value-1="."
+                  data-key-value-2=">"
                 >
                   <span>&gt;</span>.
                 </div>
                 <div
                   class="key dual-char"
-                  data-normal-value="/"
-                  data-shift-value="?"
+                  data-key-value-1="/"
+                  data-key-value-2="?"
                 >
                   <span>?</span>/
                 </div>
-                <div class="key modkey-lg" data-normal-value="shift">shift</div>
+                <div class="key modkey-lg" data-key-value-1="shift">shift</div>
               </div>
               <div class="key-row">
                 <div class="key modkey-md">control</div>
                 <div class="key modkey-md">option</div>
-                <div class="key" data-normal-value=" "></div>
+                <div class="key" data-key-value-1=" "></div>
                 <div class="key modkey-md">option</div>
                 <div class="key modkey-md">control</div>
               </div>
@@ -258,6 +252,11 @@
       <!-- SCREEN 3: STATS SCREEN -->
       <div class="stats-screen screen"></div>
     </main>
+    <script src="js/main.js"></script>
     <script src="js/test.js"></script>
+    <script
+      src="https://kit.fontawesome.com/e3ba811d50.js"
+      crossorigin="anonymous"
+    ></script>
   </body>
 </html>
