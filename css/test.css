@@ -16,7 +16,6 @@
 }
 
 .test-screen {
-  display: flex;
   background-color: var(--color-bg-page);
   justify-content: center;
   align-items: center;
