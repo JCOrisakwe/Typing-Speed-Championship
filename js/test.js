@@ -1,10 +1,29 @@
-//test.js
-
 // INITIALIZE GLOBAL VARIABLES & FUNCTIONS
 const roundDuration = 10; // in minutes
 let remainingSeconds = roundDuration * 60;
 let validKeystrokes = 0;
 let currCharIdx = 0;
+let testOver = false;
+
+let grossWPM;
+let accuracy;
+
+function endTest() {
+  updateWPM();
+  updateAccuracy();
+
+  testOver = true;
+
+  document.dispatchEvent(
+    new CustomEvent("testOver", {
+      detail: {
+        wpm: grossWPM,
+        accuracy: accuracy,
+        remainingSeconds: remainingSeconds,
+      },
+    }),
+  );
+}
 
 const promptText = `Molestiae! consequuntur explicabo, vel at minus mollitia autem impedit alias
   voluptas totam similique nihil temporibus aut. Quae veritatis ut iusto sequi, ad
@@ -14,9 +33,11 @@ const promptText = `Molestiae! consequuntur explicabo, vel at minus mollitia aut
 // ---------------- UPDATE STATS ----------------
 
 // update timer
-const timerEl = document.querySelector("[data-function='timer']");
+const timerEl = document.querySelector("[data-stat='time-left']");
 const to2digits = (num) => String(num).padStart(2, "0");
 function updateTimer() {
+  if (!remainingSeconds) return endTest();
+
   let mins = Math.floor(remainingSeconds / 60);
   let secs = remainingSeconds % 60;
   timerEl.textContent = `${to2digits(mins)}:${to2digits(secs)}`;
@@ -24,30 +45,22 @@ function updateTimer() {
 }
 
 // update wpm
-const wpmEl = document.querySelector("[data-function='wpm']");
+const wpmEl = document.querySelector("[data-stat='wpm']");
 function updateWPM() {
-  let elapseMinutes = roundDuration - remainingSeconds / 60;
-  let grossWPM = Math.round(validKeystrokes / (5 * elapseMinutes));
+  let elapsedMinutes = roundDuration - remainingSeconds / 60;
+  grossWPM = Math.round(validKeystrokes / (5 * elapsedMinutes));
   wpmEl.textContent = grossWPM || 0;
 }
 
 // update accuracy
-const accuracyEl = document.querySelector("[data-function='accuracy']");
+const accuracyEl = document.querySelector("[data-stat='accuracy']");
 const textBox = document.querySelector(".text-box");
 function updateAccuracy() {
   let correctCount = textBox.querySelectorAll(".correct-char").length;
-  let accuracy =
+  accuracy =
     currCharIdx > 0 ? Math.round((correctCount / currCharIdx) * 100) : 0;
   accuracyEl.textContent = accuracy;
 }
-
-updateWPM();
-updateTimer();
-updateAccuracy();
-const timerInterval = setInterval(() => {
-  updateTimer();
-  updateWPM();
-}, 1000);
 
 // ---------------- TEXT BOX LAYOUT AND TYPING FUNCTIONALITY ----------------
 
@@ -65,7 +78,7 @@ const isValidKeystroke = (e) =>
 const isWhiteSpace = (...chars) =>
   chars.reduce((_, char) => !char.trim() && _, true);
 
-// populate text box whith character spans
+// populate text box with character spans
 for (let char of promptText) {
   // remove excess white space
   if (!wordEl.hasChildNodes() && isWhiteSpace(char)) continue;
@@ -97,15 +110,19 @@ function handleTypingKeydown(e) {
       e.key === currentEl.innerText ||
       isWhiteSpace(e.key, currentEl.textContent);
 
+    currentEl.classList.add(isCorrect ? "correct-char" : "wrong-char");
+
     if (isWhiteSpace(currentEl.textContent) && !isCorrect) {
       currentEl.classList.add("wrong-space");
     }
-    currentEl.classList.add(isCorrect ? "correct-char" : "wrong-char");
-
-    if (currCharIdx + 1 < chars.length) chars[currCharIdx + 1].append(caret);
 
     validKeystrokes += 1;
     currCharIdx += 1;
+    if (currCharIdx < chars.length) {
+      chars[currCharIdx].append(caret);
+    } else {
+      return endTest();
+    }
     updateAccuracy();
 
     if (getBottom(caret) > textBoxBottom) {
@@ -132,13 +149,13 @@ const keyRows = document.querySelectorAll(".key-row");
 const getKeys = (e) => {
   const keyText = CSS.escape(e.key.toLowerCase());
   const elements = document.querySelectorAll(
-    `[data-normal-value='${keyText}'], [data-shift-value='${keyText}']`,
+    `[data-key-value-1='${keyText}'], [data-key-value-2='${keyText}']`,
   );
   return { keyText, elements };
 };
 
 let capsLockActive = false;
-const capsLockKey = document.querySelector("[data-normal-value='capslock']");
+const capsLockKey = document.querySelector("[data-key-value-1='capslock']");
 function syncCapsLockUI(e) {
   const isOn = e.getModifierState("CapsLock");
   if (isOn === capsLockActive) return; // no change, skip DOM work
@@ -146,7 +163,7 @@ function syncCapsLockUI(e) {
   keyRows.forEach((row) =>
     row.classList.toggle("capslock-down", capsLockActive),
   );
-  capsLockKey.classList.toggle("active-key", capsLockActive);
+  capsLockKey.classList.toggle("active", capsLockActive);
 }
 
 function handleVirtualKeyboardKeydown(e) {
@@ -162,7 +179,7 @@ function handleVirtualKeyboardKeydown(e) {
   }
 
   if (keyText !== "capslock") {
-    keys.forEach((key) => key.classList.add("active-key"));
+    keys.forEach((key) => key.classList.add("active"));
   }
 }
 
@@ -173,18 +190,34 @@ function handleVirtualKeyboardKeyup(e) {
   e.preventDefault();
 
   if (keyText !== "capslock") {
-    keys.forEach((key) => key.classList.remove("active-key"));
+    keys.forEach((key) => key.classList.remove("active"));
   }
   if (keyText === "shift") {
     keyRows.forEach((row) => row.classList.remove("shift-down"));
   }
 }
 
+// ---------------- UPDATE TEST STATE ----------------
+
+updateWPM();
+updateTimer();
+updateAccuracy();
+const timerInterval = setInterval(() => {
+  if (testOver) return null;
+
+  updateTimer();
+  updateWPM();
+}, 1000);
+
 document.addEventListener("keydown", (e) => {
+  if (testOver) return null;
+
   handleTypingKeydown(e);
   handleVirtualKeyboardKeydown(e);
 });
 
 document.addEventListener("keyup", (e) => {
+  if (testOver) return null;
+
   handleVirtualKeyboardKeyup(e);
 });
