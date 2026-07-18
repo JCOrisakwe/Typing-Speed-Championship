@@ -1,17 +1,23 @@
 // INITIALIZE GLOBAL VARIABLES & FUNCTIONS
-const roundDuration = 10; // in minutes
-let remainingSeconds = roundDuration * 60;
-let validKeystrokes = 0;
-let currCharIdx = 0;
-let testOver = false;
 
+let testOver = true;
+let remainingSeconds;
+let roundDuration;
+let currCharIdx;
+
+let promptText;
 let grossWPM;
 let accuracy;
+let correctChars;
+
+let chars;
+
+function isWhiteSpace(...chars) {
+  return chars.reduce((_, char) => !char.trim() && _, true);
+}
 
 function endTest() {
   updateWPM();
-  updateAccuracy();
-
   testOver = true;
 
   document.dispatchEvent(
@@ -25,10 +31,53 @@ function endTest() {
   );
 }
 
-const promptText = `Molestiae! consequuntur explicabo, vel at minus mollitia autem impedit alias
+function initTest() {
+  roundDuration = 10;
+  remainingSeconds = roundDuration * 60;
+  correctChars = 0;
+  currCharIdx = 0;
+  testOver = false;
+
+  textBox.scrollTop = 0;
+  textBox.replaceChildren();
+
+  promptText = `Molestiae! consequuntur explicabo, vel at minus mollitia autem impedit alias
   voluptas totam similique nihil temporibus aut. Quae veritatis ut iusto sequi, ad
   sint provident aliquid facere expedita delectus magnam blanditiis
   perspiciatis culpa harum laborum illo excepturi! Neque sunt incidunt omnis iste.`;
+
+  updateTimer();
+  updateWPM();
+  updateAccuracy();
+  populateTextBox();
+  if (chars) chars[0].append(caret);
+}
+
+const textBox = document.querySelector(".text-box");
+function populateTextBox() {
+  chars = [];
+  let wordEl = document.createElement("span");
+
+  // populate text box with character spans
+  for (let char of promptText) {
+    // remove excess white space
+    if (!wordEl.hasChildNodes() && isWhiteSpace(char)) continue;
+
+    const charEl = document.createElement("span");
+    charEl.innerHTML = char.trim() || "&nbsp;"; // replace white space with non-breakable space
+    charEl.classList.add("char");
+    chars.push(charEl);
+
+    wordEl.classList.add("word");
+    wordEl.append(charEl);
+
+    if (isWhiteSpace(char) || char === promptText.at(-1)) {
+      textBox.append(wordEl);
+      // create a new word element after a space
+      if (isWhiteSpace(char)) wordEl = document.createElement("span");
+    }
+  }
+}
 
 // ---------------- UPDATE STATS ----------------
 
@@ -48,97 +97,72 @@ function updateTimer() {
 const wpmEl = document.querySelector("[data-stat='wpm']");
 function updateWPM() {
   let elapsedMinutes = roundDuration - remainingSeconds / 60;
-  grossWPM = Math.round(validKeystrokes / (5 * elapsedMinutes));
+  grossWPM = Math.round(correctChars / (5 * elapsedMinutes));
   wpmEl.textContent = grossWPM || 0;
 }
 
 // update accuracy
 const accuracyEl = document.querySelector("[data-stat='accuracy']");
-const textBox = document.querySelector(".text-box");
 function updateAccuracy() {
-  let correctCount = textBox.querySelectorAll(".correct-char").length;
   accuracy =
-    currCharIdx > 0 ? Math.round((correctCount / currCharIdx) * 100) : 0;
+    currCharIdx > 0 ? Math.round((correctChars / currCharIdx) * 100) : 0;
   accuracyEl.textContent = accuracy;
 }
 
 // ---------------- TEXT BOX LAYOUT AND TYPING FUNCTIONALITY ----------------
 
-// initialize typing/text box variables and constants
-const chars = [];
-let wordEl = document.createElement("span");
-const textBoxLineHeight = Number(
-  getComputedStyle(textBox).lineHeight.replace("px", ""),
-);
+// create caret
+const caret = document.createElement("span");
+caret.classList.add("caret");
 
-const getBottom = (el) => el.getBoundingClientRect().bottom;
-const textBoxBottom = getBottom(textBox);
-const isValidKeystroke = (e) =>
-  e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey;
-const isWhiteSpace = (...chars) =>
-  chars.reduce((_, char) => !char.trim() && _, true);
+function updateScroll(scrollup = true) {
+  const styles = getComputedStyle(textBox);
+  const lineHeight = Number(styles.lineHeight.replace("px", ""));
+  const relativeTop = chars[currCharIdx].offsetTop - textBox.scrollTop;
 
-// populate text box with character spans
-for (let char of promptText) {
-  // remove excess white space
-  if (!wordEl.hasChildNodes() && isWhiteSpace(char)) continue;
-
-  const charEl = document.createElement("span");
-  charEl.innerHTML = char.trim() || "&nbsp;"; // replace white space with non-breakable space
-  charEl.classList.add("char");
-  chars.push(charEl);
-
-  wordEl.classList.add("word");
-  wordEl.append(charEl);
-
-  if (isWhiteSpace(char) || char === promptText.at(-1)) {
-    textBox.append(wordEl);
-    // create a new word element after a space
-    if (isWhiteSpace(char)) wordEl = document.createElement("span");
+  if (scrollup && relativeTop > textBox.clientHeight) {
+    textBox.scrollTop += lineHeight;
+  } else if (!scrollup && textBox.clientHeight - relativeTop >= lineHeight) {
+    textBox.scrollTop -= lineHeight;
   }
 }
 
-// create caret and place before first character
-const caret = document.createElement("span");
-caret.classList.add("caret");
-chars[0].append(caret);
-
 function handleTypingKeydown(e) {
-  if (isValidKeystroke(e) && currCharIdx < chars.length) {
+  const isValidKeystroke =
+    e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey;
+
+  if (isValidKeystroke && currCharIdx < chars.length) {
     const currentEl = chars[currCharIdx];
     const isCorrect =
       e.key === currentEl.innerText ||
       isWhiteSpace(e.key, currentEl.textContent);
 
     currentEl.classList.add(isCorrect ? "correct-char" : "wrong-char");
-
     if (isWhiteSpace(currentEl.textContent) && !isCorrect) {
       currentEl.classList.add("wrong-space");
     }
+    if (isCorrect) correctChars += 1;
 
-    validKeystrokes += 1;
     currCharIdx += 1;
-    if (currCharIdx < chars.length) {
-      chars[currCharIdx].append(caret);
-    } else {
-      return endTest();
-    }
     updateAccuracy();
 
-    if (getBottom(caret) > textBoxBottom) {
-      textBox.scrollTop += textBoxLineHeight;
-    }
+    if (currCharIdx >= chars.length) return endTest();
+
+    updateScroll();
+    chars[currCharIdx].append(caret);
   } else if (e.key.toLowerCase() === "backspace") {
     const prevElemIdx = Math.max(0, currCharIdx - 1);
     const prevEl = chars[prevElemIdx];
-    if (prevEl) {
-      prevEl.classList.remove("correct-char", "wrong-char", "wrong-space");
-      currCharIdx = prevElemIdx;
-      prevEl.append(caret);
-    }
-    if (textBoxBottom - getBottom(prevEl) >= textBoxLineHeight) {
-      textBox.scrollTop -= textBoxLineHeight;
-    }
+
+    if (!prevEl) return;
+
+    if (prevEl.classList.contains("correct-char")) correctChars -= 1;
+    prevEl.classList.remove("correct-char", "wrong-char", "wrong-space");
+
+    currCharIdx = prevElemIdx;
+    prevEl.append(caret);
+
+    updateScroll(false);
     updateAccuracy();
   }
 }
@@ -177,7 +201,6 @@ function handleVirtualKeyboardKeydown(e) {
   if (keyText === "shift") {
     keyRows.forEach((row) => row.classList.add("shift-down"));
   }
-
   if (keyText !== "capslock") {
     keys.forEach((key) => key.classList.add("active"));
   }
@@ -198,26 +221,22 @@ function handleVirtualKeyboardKeyup(e) {
 }
 
 // ---------------- UPDATE TEST STATE ----------------
+document.addEventListener("testBegun", initTest);
 
-updateWPM();
-updateTimer();
-updateAccuracy();
 const timerInterval = setInterval(() => {
-  if (testOver) return null;
+  if (testOver) return;
 
   updateTimer();
   updateWPM();
 }, 1000);
 
 document.addEventListener("keydown", (e) => {
-  if (testOver) return null;
+  if (testOver) return;
 
   handleTypingKeydown(e);
   handleVirtualKeyboardKeydown(e);
 });
 
 document.addEventListener("keyup", (e) => {
-  if (testOver) return null;
-
   handleVirtualKeyboardKeyup(e);
 });
