@@ -1,3 +1,20 @@
+:root {
+  /* Neutrals */
+  --color-bg-page: #f0f0f0;
+  --color-bg-panel: #ffffff;
+  --color-border: #d8d8d8;
+  --color-text-primary: #000000;
+  --color-text-muted: #000000a6; /* black at ~65% opacity */
+
+  /* Brand / interactive */
+  --color-accent: #0000ff;
+
+  /* Feedback states */
+  --color-success: #16a34a;
+  --color-error: #ef4444;
+  --color-error-bg: #ef444480; /* error at 50% opacity */
+}
+
 *,
 *::before,
 *::after {
@@ -8,8 +25,11 @@
   background: none;
 }
 
-html {
-  font-family: "JetBrains Mono", ui-monospace, "SF Mono", Consolas, monospace;
+html,
+input,
+textarea,
+button {
+  font-family: "JetBrains Mono", monospace;
 }
 
 .screen {
@@ -20,4 +40,19 @@ html {
 
 .screen.active {
   display: flex;
+}
+
+.btn-primary {
+  color: var(--color-bg-panel);
+  padding: 1.125em 4.5em;
+  border-radius: 0.9em;
+  text-transform: uppercase;
+  background-color: var(--color-accent);
+  border: none;
+  cursor: pointer;
+}
+
+.btn-primary:focus-visible {
+  outline: 2px solid var(--color-text-primary);
+  outline-offset: 2px;
 }
