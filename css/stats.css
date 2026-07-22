@@ -1,0 +1,120 @@
+.stats-screen {
+  font-size: 0.9375rem;
+  justify-content: center;
+  align-items: center;
+  padding: 0 1.5625rem;
+  gap: 3.3125rem;
+}
+
+.stats-summary-panel {
+  display: flex;
+  flex-basis: 9.5625rem;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 31.8125rem;
+}
+
+.stats-summary-panel > div {
+  display: none;
+  flex-basis: 6.75rem;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.stats-figure {
+  font-size: 3.8125rem;
+}
+
+.stats-analysis-panel {
+  flex-basis: 56.25rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: fit-content;
+  position: relative;
+}
+
+.stats-analysis-panel > div {
+  border: 1px solid var(--color-text-primary);
+  border-radius: 0.6875rem;
+  margin-top: 1.8125rem;
+}
+
+.stats-analysis-panel > .test-replay {
+  margin: 0;
+  height: 9.0625rem;
+}
+
+.test-replay {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.test-replay > button {
+  border: 1px solid var(--color-text-primary);
+  border-radius: 50%;
+  width: 4.6875rem;
+  height: 4.6875rem;
+  cursor: pointer;
+}
+
+.test-replay > button:focus-visible {
+  outline: 2px solid var(--color-text-primary);
+  outline-offset: 2px;
+}
+
+.stats-analysis-panel > .graph {
+  display: none;
+  height: 20.9375rem;
+}
+
+.stats-summary-panel > .show-n-slide,
+.stats-analysis-panel > .show-n-slide {
+  display: flex;
+  animation-duration: 1s;
+  animation-delay: 0s;
+}
+
+.stats-summary-panel > .slide-r {
+  animation-name: showAndSlideRight;
+}
+
+.stats-analysis-panel > .slide-u {
+  animation-name: showAndSlideUp;
+}
+
+@keyframes showAndSlideRight {
+  0% {
+    transform: translateX(-0.625rem);
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes showAndSlideUp {
+  0% {
+    transform: translateY(0.625rem);
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.stats-analysis-panel > button {
+  position: absolute;
+  bottom: -1.8125rem;
+  left: 50%;
+  transform: translate(-50%, 100%);
+}
