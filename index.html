@@ -6,6 +6,7 @@
     <title>Typing Test</title>
 
     <link rel="stylesheet" href="css/index.css" />
+    <link rel="stylesheet" href="css/home.css" />
     <link rel="stylesheet" href="css/test.css" />
     <link rel="stylesheet" href="css/stats.css" />
 
@@ -26,7 +27,9 @@
   <body>
     <main>
       <!-- SCREEN 1: HOME SCREEN -->
-      <div class="home-screen screen"></div>
+      <div class="home-screen screen active">
+        <button class="start-test-btn">Test Yourself!</button>
+      </div>
 
       <!-- SCREEN 2: TEST SCREEN -->
       <div class="test-screen screen">
@@ -237,23 +240,67 @@
                 <div class="key modkey-lg" data-key-value-1="shift">shift</div>
               </div>
               <div class="key-row">
-                <div class="key modkey-md">control</div>
-                <div class="key modkey-md">option</div>
+                <div class="key modkey-md" data-key-value-1="control">
+                  control
+                </div>
+                <div class="key modkey-md" data-key-value-1="option">
+                  option
+                </div>
                 <div class="key" data-key-value-1=" "></div>
-                <div class="key modkey-md">option</div>
-                <div class="key modkey-md">control</div>
+                <div class="key modkey-md" data-key-value-1="option">
+                  option
+                </div>
+                <div class="key modkey-md" data-key-value-1="control">
+                  control
+                </div>
               </div>
             </div>
           </div>
-          <div class="test-screen__footer"><button>reset</button></div>
+          <div class="test-screen__footer">
+            <button class="btn-primary">reset</button>
+          </div>
         </div>
       </div>
 
       <!-- SCREEN 3: STATS SCREEN -->
-      <div class="stats-screen screen"></div>
+      <div class="stats-screen screen">
+        <div class="stats-summary-panel">
+          <div class="show-n-slide slide-r">
+            <span class="stats-figure"></span><span>accuracy</span>
+          </div>
+          <div class="show-n-slide slide-r">
+            <span class="stats-figure"></span><span>words per minute</span>
+          </div>
+          <div class="show-n-slide slide-r">
+            <span class="stats-figure"></span><span>true accuracy</span>
+          </div>
+          <div class="slide-r">
+            <span class="stats-figure"></span><span>duration</span>
+          </div>
+          <div class="slide-r">
+            <span class="stats-figure"></span><span>errors</span>
+          </div>
+          <div class="slide-r">
+            <span class="stats-figure"></span><span>characters</span>
+          </div>
+        </div>
+        <div class="stats-analysis-panel">
+          <div class="test-replay">
+            <div class="overlay"></div>
+            <button aria-label="replay">
+              <i class="fa-solid fa-play fa-2xl"></i>
+            </button>
+          </div>
+          <div class="graph show-n-slide slide-u"></div>
+          <div class="graph slide-u"></div>
+          <button class="btn-primary">Continue</button>
+        </div>
+      </div>
     </main>
-    <script src="js/main.js"></script>
-    <script src="js/test.js"></script>
+    <script type="module" src="js/index.js"></script>
+    <script type="module" src="js/home.js"></script>
+    <script type="module" src="js/test.js"></script>
+    <script type="module" src="js/stats.js"></script>
     <script
       src="https://kit.fontawesome.com/e3ba811d50.js"
       crossorigin="anonymous"
