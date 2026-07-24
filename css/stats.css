@@ -8,10 +8,19 @@
 
 .stats-summary-panel {
   display: flex;
-  flex-basis: 9.5625rem;
+  flex-basis: 12rem;
   flex-direction: column;
   justify-content: space-between;
   height: 31.8125rem;
+  position: relative;
+}
+
+.previous-stats {
+  color: var(--color-accent);
+  position: absolute;
+  left: -100px;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 .stats-summary-panel > div {
@@ -23,6 +32,13 @@
 
 .stats-figure {
   font-size: 3.8125rem;
+  display: flex;
+  align-items: center;
+}
+
+.stats-figure > span {
+  font-size: 0.85rem;
+  font-style: italic;
 }
 
 .stats-analysis-panel {
