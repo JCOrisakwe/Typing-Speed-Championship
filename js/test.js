@@ -4,11 +4,14 @@ let testOver = true;
 let remainingSeconds;
 let roundDuration;
 let currCharIdx;
+let highWaterMark;
 
 let promptText;
-let grossWPM;
+let wpm;
 let accuracy;
-let correctChars;
+let totalKeystrokes;
+let correctKeystrokes;
+let correctFirstAttempts;
 
 let chars;
 
@@ -16,16 +19,28 @@ function isWhiteSpace(...chars) {
   return chars.reduce((_, char) => !char.trim() && _, true);
 }
 
+function formatTime(seconds) {
+  const to2digits = (num) => String(num).padStart(2, "0");
+  return `${to2digits(Math.floor(seconds / 60))}:${to2digits(seconds % 60)}`;
+}
+
 function endTest() {
   updateWPM();
   testOver = true;
+  let trueAccuracy = Math.round((correctFirstAttempts / highWaterMark) * 100);
+  let errors = highWaterMark - correctFirstAttempts;
+  let duration = formatTime(roundDuration * 60 - remainingSeconds);
 
   document.dispatchEvent(
     new CustomEvent("testOver", {
       detail: {
-        wpm: grossWPM,
-        accuracy: accuracy,
-        remainingSeconds: remainingSeconds,
+        wpm: wpm,
+        accuracy: `${accuracy}%`,
+        "true-accuracy": `${trueAccuracy}%`,
+        errors: errors,
+        characters: `${highWaterMark}`,
+        duration: duration,
+        promptLength: chars.length,
       },
     }),
   );
@@ -34,8 +49,11 @@ function endTest() {
 function initTest() {
   roundDuration = 10;
   remainingSeconds = roundDuration * 60;
-  correctChars = 0;
+  correctKeystrokes = 0;
+  correctFirstAttempts = 0;
   currCharIdx = 0;
+  highWaterMark = 0;
+  totalKeystrokes = 0;
   testOver = false;
 
   textBox.scrollTop = 0;
@@ -82,30 +100,26 @@ function populateTextBox() {
 // ---------------- UPDATE STATS ----------------
 
 // update timer
-const timerEl = document.querySelector("[data-stat='time-left']");
-const to2digits = (num) => String(num).padStart(2, "0");
+const timerEl = document.querySelector("[data-current-stat='time-left']");
 function updateTimer() {
   if (!remainingSeconds) return endTest();
-
-  let mins = Math.floor(remainingSeconds / 60);
-  let secs = remainingSeconds % 60;
-  timerEl.textContent = `${to2digits(mins)}:${to2digits(secs)}`;
+  timerEl.textContent = formatTime(remainingSeconds);
   remainingSeconds -= 1;
 }
 
 // update wpm
-const wpmEl = document.querySelector("[data-stat='wpm']");
+const wpmEl = document.querySelector("[data-current-stat='wpm']");
 function updateWPM() {
   let elapsedMinutes = roundDuration - remainingSeconds / 60;
-  grossWPM = Math.round(correctChars / (5 * elapsedMinutes));
-  wpmEl.textContent = grossWPM || 0;
+  wpm = Math.round(correctKeystrokes / (5 * elapsedMinutes));
+  wpmEl.textContent = wpm || 0;
 }
 
 // update accuracy
-const accuracyEl = document.querySelector("[data-stat='accuracy']");
+const accuracyEl = document.querySelector("[data-current-stat='accuracy']");
 function updateAccuracy() {
   accuracy =
-    currCharIdx > 0 ? Math.round((correctChars / currCharIdx) * 100) : 0;
+    currCharIdx > 0 ? Math.round((correctKeystrokes / currCharIdx) * 100) : 0;
   accuracyEl.textContent = accuracy;
 }
 
@@ -136,12 +150,22 @@ function handleTypingKeydown(e) {
     const isCorrect =
       e.key === currentEl.innerText ||
       isWhiteSpace(e.key, currentEl.textContent);
+    totalKeystrokes += 1;
 
     currentEl.classList.add(isCorrect ? "correct-char" : "wrong-char");
     if (isWhiteSpace(currentEl.textContent) && !isCorrect) {
       currentEl.classList.add("wrong-space");
     }
-    if (isCorrect) correctChars += 1;
+
+    if (currCharIdx === highWaterMark && isCorrect) {
+      correctFirstAttempts += 1;
+      highWaterMark += 1;
+      correctKeystrokes += 1;
+    } else if (currCharIdx === highWaterMark) {
+      highWaterMark += 1;
+    } else if (isCorrect) {
+      correctKeystrokes += 1;
+    }
 
     currCharIdx += 1;
     updateAccuracy();
@@ -156,7 +180,7 @@ function handleTypingKeydown(e) {
 
     if (!prevEl) return;
 
-    if (prevEl.classList.contains("correct-char")) correctChars -= 1;
+    if (prevEl.classList.contains("correct-char")) correctKeystrokes -= 1;
     prevEl.classList.remove("correct-char", "wrong-char", "wrong-space");
 
     currCharIdx = prevElemIdx;
