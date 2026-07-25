@@ -3,12 +3,12 @@
   justify-content: center;
   align-items: center;
   padding: 0 1.5625rem;
-  gap: 3.3125rem;
+  gap: 2rem;
 }
 
 .stats-summary-panel {
   display: flex;
-  flex-basis: 12rem;
+  flex-basis: 13.5rem;
   flex-direction: column;
   justify-content: space-between;
   height: 31.8125rem;
@@ -16,11 +16,18 @@
 }
 
 .previous-stats {
+  display: none;
   color: var(--color-accent);
   position: absolute;
   left: -100px;
   top: 50%;
   transform: translateY(-50%);
+  padding: 5px;
+  cursor: pointer;
+}
+
+.previous-stats.active {
+  display: block;
 }
 
 .stats-summary-panel > div {
@@ -36,7 +43,7 @@
   align-items: center;
 }
 
-.stats-figure > span {
+.stats-figure > span:last-of-type {
   font-size: 0.85rem;
   font-style: italic;
 }
