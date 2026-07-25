@@ -12,3 +12,11 @@ function activateScreen(screenClass) {
 document.addEventListener("testOver", () => {
   activateScreen("stats-screen");
 });
+
+document.addEventListener("returnHome", () => {
+  activateScreen("home-screen");
+});
+
+document.addEventListener("startTest", () => {
+  activateScreen("test-screen");
+});
