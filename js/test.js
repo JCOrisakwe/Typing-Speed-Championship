@@ -245,7 +245,8 @@ function handleVirtualKeyboardKeyup(e) {
 }
 
 // ---------------- UPDATE TEST STATE ----------------
-document.addEventListener("testBegun", initTest);
+
+document.addEventListener("startTest", initTest);
 
 const timerInterval = setInterval(() => {
   if (testOver) return;
