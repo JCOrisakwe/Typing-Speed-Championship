@@ -48,7 +48,6 @@ button {
   border-radius: 0.9em;
   text-transform: uppercase;
   background-color: var(--color-accent);
-  border: none;
   cursor: pointer;
 }
 
