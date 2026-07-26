@@ -1,6 +1,7 @@
 // INITIALIZE GLOBAL VARIABLES & FUNCTIONS
 
-let testOver = true;
+let testInactive = true;
+let screenInactive = true;
 let remainingSeconds;
 let roundDuration;
 let currCharIdx;
@@ -26,8 +27,10 @@ function formatTime(seconds) {
 
 function endTest() {
   updateWPM();
-  testOver = true;
-  let trueAccuracy = Math.round((correctFirstAttempts / highWaterMark) * 100);
+  testInactive = true;
+  screenInactive = true;
+  let trueAccuracy =
+    Math.round((correctFirstAttempts / highWaterMark) * 100) || 0;
   let errors = highWaterMark - correctFirstAttempts;
   let duration = formatTime(roundDuration * 60 - remainingSeconds);
 
@@ -54,7 +57,8 @@ function initTest() {
   currCharIdx = 0;
   highWaterMark = 0;
   totalKeystrokes = 0;
-  testOver = false;
+  testInactive = false;
+  screenInactive = false;
 
   textBox.scrollTop = 0;
   textBox.replaceChildren();
@@ -244,20 +248,69 @@ function handleVirtualKeyboardKeyup(e) {
   }
 }
 
+// ---------------- QUIT/RESET POP-UP LAYOUT AND FUNCTIONALITY ----------------
+const popUp = document.querySelector(".test-screen .pop-up");
+const popUpMsg = document.querySelector(".test-screen .pop-up > div");
+const popUpThemeEls = document.querySelectorAll(".pop-up-theme");
+const quitBtn = document.querySelector(".test-screen__header > button");
+const resetBtn = document.querySelector(".test-screen__footer > button");
+const popUpProceedBtn = document.querySelector(".pop-up-proceed-btn");
+const popUpReturnBtn = document.querySelector(".pop-up-return-btn");
+
+let popUpTheme;
+let popUpEvent;
+
+const togglePopUp = (popUpThemeArg = "quit", show = true) => {
+  testInactive = show;
+  popUp.classList.toggle("active", show);
+
+  if (!show) return;
+
+  popUpThemeEls.forEach((el) => (el.textContent = popUpThemeArg));
+  popUpTheme = popUpThemeArg;
+};
+
+const handleEscKeydown = (e) => {
+  if (e.key.toLowerCase() !== "escape" || screenInactive) return;
+  togglePopUp("quit", !popUp.classList.contains("active"));
+};
+
+quitBtn.addEventListener("click", () => togglePopUp());
+resetBtn.addEventListener("click", () => togglePopUp("restart"));
+popUpReturnBtn.addEventListener("click", () => togglePopUp(null, false));
+
+popUp.addEventListener("click", (e) => {
+  if (!popUpMsg.contains(e.target)) togglePopUp(null, false);
+});
+
+popUpProceedBtn.addEventListener("click", () => {
+  if (popUpTheme === "quit") {
+    popUpEvent = "returnHome";
+    screenInactive = true;
+  } else if (popUpTheme === "restart") {
+    popUpEvent = "startTest";
+  }
+  if (popUpEvent) {
+    document.dispatchEvent(new CustomEvent(popUpEvent));
+    popUp.classList.remove("active");
+  }
+});
+
 // ---------------- UPDATE TEST STATE ----------------
 
 document.addEventListener("startTest", initTest);
 
 const timerInterval = setInterval(() => {
-  if (testOver) return;
+  if (testInactive) return;
 
   updateTimer();
   updateWPM();
 }, 1000);
 
 document.addEventListener("keydown", (e) => {
-  if (testOver) return;
+  handleEscKeydown(e);
 
+  if (testInactive) return;
   handleTypingKeydown(e);
   handleVirtualKeyboardKeydown(e);
 });
