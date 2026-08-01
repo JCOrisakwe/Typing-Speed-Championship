@@ -33,14 +33,52 @@
 
       <!-- SCREEN 2: TEST SCREEN -->
       <div class="test-screen screen">
-        <div class="pop-up">
+        <div class="modal countdown-modal">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="125"
+            height="139"
+            viewBox="0 0 125 139"
+            fill="none"
+          >
+            <circle
+              cx="62.5"
+              cy="76.5"
+              r="57.5"
+              stroke="#0000FF"
+              stroke-width="10"
+            />
+            <line
+              x1="49"
+              y1="5"
+              x2="77"
+              y2="5"
+              stroke="#0000FF"
+              stroke-width="10"
+              stroke-linecap="round"
+            />
+            <line
+              x1="63"
+              y1="15"
+              x2="63"
+              y2="5"
+              stroke="#0000FF"
+              stroke-width="10"
+              stroke-linecap="round"
+            />
+          </svg>
+          <span>3</span>
+        </div>
+        <div class="modal confirm-modal">
           <div>
             <p>
               Are you sure you want to
-              <span class="pop-up-theme">quit</span> this session?
+              <span class="confirm-modal-theme">quit</span> this session?
             </p>
-            <button class="pop-up-return-btn btn-primary">return</button>
-            <button class="pop-up-proceed-btn pop-up-theme">quit</button>
+            <button class="confirm-modal-return-btn btn-primary">return</button>
+            <button class="confirm-modal-proceed-btn confirm-modal-theme">
+              quit
+            </button>
           </div>
         </div>
         <div class="test-screen__body">
@@ -299,6 +337,7 @@
           </div>
         </div>
         <div class="stats-analysis-panel">
+          <div></div>
           <div class="test-replay">
             <div class="overlay"></div>
             <button aria-label="replay">
