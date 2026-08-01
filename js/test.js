@@ -1,9 +1,9 @@
 // INITIALIZE GLOBAL VARIABLES & FUNCTIONS
 
-let testInactive = true;
-let screenInactive = true;
+let testPaused = true;
 let remainingSeconds;
 let roundDuration;
+let timerInterval;
 let currCharIdx;
 let highWaterMark;
 
@@ -27,12 +27,12 @@ function formatTime(seconds) {
 
 function endTest() {
   updateWPM();
-  testInactive = true;
-  screenInactive = true;
+  testPaused = true;
   let trueAccuracy =
     Math.round((correctFirstAttempts / highWaterMark) * 100) || 0;
   let errors = highWaterMark - correctFirstAttempts;
   let duration = formatTime(roundDuration * 60 - remainingSeconds);
+  clearInterval(timerInterval);
 
   document.dispatchEvent(
     new CustomEvent("testOver", {
@@ -57,8 +57,6 @@ function initTest() {
   currCharIdx = 0;
   highWaterMark = 0;
   totalKeystrokes = 0;
-  testInactive = false;
-  screenInactive = false;
 
   textBox.scrollTop = 0;
   textBox.replaceChildren();
@@ -72,6 +70,7 @@ function initTest() {
   updateWPM();
   updateAccuracy();
   populateTextBox();
+  startCountDown();
   if (chars) chars[0].append(caret);
 }
 
@@ -125,6 +124,14 @@ function updateAccuracy() {
   accuracy =
     currCharIdx > 0 ? Math.round((correctKeystrokes / currCharIdx) * 100) : 0;
   accuracyEl.textContent = accuracy;
+}
+
+function updateStats() {
+  timerInterval = setInterval(() => {
+    if (testPaused) return;
+    updateTimer();
+    updateWPM();
+  }, 1000);
 }
 
 // ---------------- TEXT BOX LAYOUT AND TYPING FUNCTIONALITY ----------------
@@ -248,73 +255,86 @@ function handleVirtualKeyboardKeyup(e) {
   }
 }
 
-// ---------------- QUIT/RESET POP-UP LAYOUT AND FUNCTIONALITY ----------------
-const popUp = document.querySelector(".test-screen .pop-up");
-const popUpMsg = document.querySelector(".test-screen .pop-up > div");
-const popUpThemeEls = document.querySelectorAll(".pop-up-theme");
+// ---------------- COUNTDOWN MODAL LAYOUT AND FUNCTIONALITY ----------------
+
+const countdownModal = document.querySelector(".countdown-modal");
+const countdownModalNum = document.querySelector(".countdown-modal > span");
+function startCountDown() {
+  let Num = 3;
+  countdownModal.classList.add("active");
+  countdownModalNum.textContent = Num;
+
+  let intervalId = setInterval(() => {
+    Num -= 1;
+    if (Num < 0) {
+      clearInterval(intervalId);
+      countdownModal.classList.remove("active");
+      testPaused = false;
+      updateStats();
+    }
+    countdownModalNum.textContent = Num || "Go";
+  }, 1000);
+}
+
+// ---------------- CONFIRM MODAL LAYOUT AND FUNCTIONALITY ----------------
+const confirmModal = document.querySelector(".confirm-modal");
+const confirmModalMsg = document.querySelector(".confirm-modal > div");
+const confirmModalThemeEls = document.querySelectorAll(".confirm-modal-theme");
 const quitBtn = document.querySelector(".test-screen__header > button");
 const resetBtn = document.querySelector(".test-screen__footer > button");
-const popUpProceedBtn = document.querySelector(".pop-up-proceed-btn");
-const popUpReturnBtn = document.querySelector(".pop-up-return-btn");
+const confirmModalProceedBtn = document.querySelector(
+  ".confirm-modal-proceed-btn",
+);
+const confirmModalReturnBtn = document.querySelector(
+  ".confirm-modal-return-btn",
+);
 
-let popUpTheme;
-let popUpEvent;
+let confirmModalTheme;
+let confirmModalEvent;
 
-const togglePopUp = (popUpThemeArg = "quit", show = true) => {
-  testInactive = show;
-  popUp.classList.toggle("active", show);
+const toggleConfirmModal = (confirmModalThemeArg = "quit", show = true) => {
+  testPaused = show;
+  confirmModal.classList.toggle("active", show);
 
   if (!show) return;
 
-  popUpThemeEls.forEach((el) => (el.textContent = popUpThemeArg));
-  popUpTheme = popUpThemeArg;
+  confirmModalThemeEls.forEach((el) => (el.textContent = confirmModalThemeArg));
+  confirmModalTheme = confirmModalThemeArg;
 };
 
-const handleEscKeydown = (e) => {
-  if (e.key.toLowerCase() !== "escape" || screenInactive) return;
-  togglePopUp("quit", !popUp.classList.contains("active"));
-};
-
-quitBtn.addEventListener("click", () => togglePopUp());
-resetBtn.addEventListener("click", () => togglePopUp("restart"));
-popUpReturnBtn.addEventListener("click", () => togglePopUp(null, false));
-
-popUp.addEventListener("click", (e) => {
-  if (!popUpMsg.contains(e.target)) togglePopUp(null, false);
-});
-
-popUpProceedBtn.addEventListener("click", () => {
-  if (popUpTheme === "quit") {
-    popUpEvent = "returnHome";
-    screenInactive = true;
-  } else if (popUpTheme === "restart") {
-    popUpEvent = "startTest";
-  }
-  if (popUpEvent) {
-    document.dispatchEvent(new CustomEvent(popUpEvent));
-    popUp.classList.remove("active");
-  }
-});
-
-// ---------------- UPDATE TEST STATE ----------------
+// ---------------- REACT TO EVENTS ----------------
 
 document.addEventListener("startTest", initTest);
 
-const timerInterval = setInterval(() => {
-  if (testInactive) return;
-
-  updateTimer();
-  updateWPM();
-}, 1000);
-
 document.addEventListener("keydown", (e) => {
-  handleEscKeydown(e);
-
-  if (testInactive) return;
+  if (testPaused) return;
   handleTypingKeydown(e);
   handleVirtualKeyboardKeydown(e);
 });
 
 document.addEventListener("keyup", (e) => {
   handleVirtualKeyboardKeyup(e);
+});
+
+quitBtn.addEventListener("click", () => toggleConfirmModal());
+resetBtn.addEventListener("click", () => toggleConfirmModal("restart"));
+
+confirmModalProceedBtn.addEventListener("click", () => {
+  if (confirmModalTheme === "quit") {
+    confirmModalEvent = "returnHome";
+  } else if (confirmModalTheme === "restart") {
+    confirmModalEvent = "startTest";
+  }
+  if (confirmModalEvent) {
+    document.dispatchEvent(new CustomEvent(confirmModalEvent));
+    confirmModal.classList.remove("active");
+  }
+});
+
+confirmModalReturnBtn.addEventListener("click", () =>
+  toggleConfirmModal(null, false),
+);
+
+confirmModal.addEventListener("click", (e) => {
+  if (!confirmModalMsg.contains(e.target)) toggleConfirmModal(null, false);
 });
