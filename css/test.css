@@ -5,7 +5,7 @@
   position: relative;
 }
 
-.test-screen > .pop-up {
+.modal {
   width: 100%;
   height: 100%;
   position: absolute;
@@ -13,9 +13,23 @@
   justify-content: center;
   align-items: center;
   background-color: #202f3699;
+  z-index: 1;
 }
 
-.test-screen > .pop-up > div {
+.countdown-modal {
+  background-color: var(--color-bg-panel);
+}
+
+.countdown-modal > span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  font-size: 60px;
+  color: var(--color-accent);
+  transform: translate(-50%, -50%);
+}
+
+.confirm-modal > div {
   font-size: 16px;
   font-weight: 600;
   line-height: 25px;
@@ -27,17 +41,16 @@
   padding: 32px 24px 12px;
   background-color: var(--color-bg-panel);
 
-  z-index: 1;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
 
-.test-screen > .pop-up.active {
+.modal.active {
   display: flex;
 }
 
-.pop-up-proceed-btn {
+.confirm-modal-proceed-btn {
   color: #ff0000;
   font-weight: 700;
   text-transform: uppercase;
@@ -96,6 +109,7 @@
 .text-box {
   width: 36rem;
   height: 9rem;
+  position: relative;
   padding: 0.45em 0.8em;
   font-size: 1.075rem;
   line-height: 1.9em;
