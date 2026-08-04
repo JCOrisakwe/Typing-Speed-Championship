@@ -60,17 +60,18 @@
 
 .test-screen__body {
   background-color: var(--color-bg-panel);
-  width: 80rem;
-  height: 45rem;
-  display: grid;
-  grid-template-rows: 6rem 1fr 6rem;
+  width: min(100%, 80rem);
+  display: flex;
+  flex-direction: column;
 }
 
 .test-screen__header {
   display: flex;
+  height: 6rem;
   color: var(--color-text-muted);
+  font-size: clamp(0.9rem, 1.75vw, 1rem);
   text-transform: uppercase;
-  padding: 0 3.5rem;
+  padding: 0 3%;
   justify-content: space-between;
   align-items: center;
 }
@@ -98,26 +99,36 @@
 
 .test-screen__main {
   border: 0 solid var(--color-border);
-  padding: 2rem 0;
+  padding: 3% 2%;
   border-width: 2px 0;
+  gap: 4.3vw;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
+  position: relative;
+}
+
+.text-box,
+.text-box-overlay {
+  width: min(100%, 36rem);
+  height: 8.3rem;
 }
 
 .text-box {
-  width: 36rem;
-  height: 9rem;
   position: relative;
-  padding: 0.45em 0.8em;
-  font-size: 1.075rem;
+  padding: 0.38em 0.8em;
+  font-size: clamp(0.85rem, 4vw, 1.075rem);
   line-height: 1.9em;
   border: 2px solid var(--color-border);
   border-radius: 0.875rem;
   overflow-y: auto;
   scrollbar-width: none;
   overflow-wrap: break-word;
+}
+
+.text-box-overlay {
+  position: absolute;
 }
 
 .text-box::-webkit-scrollbar {
@@ -155,18 +166,18 @@
 }
 
 .keyboard {
-  font-size: 0.7rem;
-  width: 50.25em;
-  height: 22.5em;
+  font-size: clamp(0.46rem, 2vw, 0.7rem);
+  width: min(100%, 50em);
+  aspect-ratio: 10 /4.5;
   display: flex;
   flex-direction: column;
-  gap: 0.5em;
+  justify-content: space-between;
 }
 
 .key-row {
-  flex: 1;
+  height: 18%;
   display: flex;
-  gap: 0.45em;
+  gap: clamp(0.2em, 0.3vw, 0.5em);
 }
 
 .key {
@@ -192,15 +203,15 @@
 }
 
 .modkey-sm {
-  flex: 0 0 5em;
+  flex: 0 0 11.5%;
 }
 
 .modkey-md {
-  flex: 0 0 6em;
+  flex: 0 0 13.8%;
 }
 
 .modkey-lg {
-  flex: 0 0 7.5em;
+  flex: 0 0 17.25%;
 }
 
 .key.active {
@@ -231,6 +242,7 @@
 }
 
 .test-screen__footer {
+  height: 6rem;
   display: flex;
   padding: 0 3.5rem;
   align-items: center;
