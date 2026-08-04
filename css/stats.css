@@ -2,22 +2,24 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 0 1.5rem;
-  gap: 2rem;
+  padding: 0 2%;
+  gap: 1.6vw;
 }
 
 .stats-summary-panel {
   display: flex;
   justify-content: space-between;
-  width: 50rem;
+  font-size: clamp(0.8rem, 2vw, 1rem);
+  width: min(50rem, 90%);
   position: relative;
+  transform: translateX(2.5%);
 }
 
 .previous-stats {
   opacity: 0;
   color: var(--color-accent);
   position: absolute;
-  left: -50px;
+  left: -7.5vw;
   top: 50%;
   transform: translateY(-50%);
 }
@@ -35,7 +37,7 @@
 .stats-figure {
   display: flex;
   align-items: center;
-  font-size: 4rem;
+  font-size: clamp(2rem, 8vw, 4rem);
 }
 
 .stats-figure > span:last-of-type {
@@ -44,10 +46,10 @@
 }
 
 .stats-analysis-panel {
-  display: grid;
-  grid-template-columns: 52rem;
-  grid-template-rows: 9rem 23rem;
-  gap: 2rem;
+  display: flex;
+  flex-direction: column;
+  width: min(100%, 52rem);
+  gap: 1.5vw;
 }
 
 .stats-analysis-panel > div {
@@ -62,6 +64,7 @@
 
 .stats-analysis-panel > .test-replay {
   display: flex;
+  aspect-ratio: 52 / 10;
   justify-content: center;
   align-items: center;
   order: 0;
@@ -70,9 +73,10 @@
 .test-replay > button {
   border: 1px solid var(--color-text-primary);
   border-radius: 50%;
-  width: 4.5rem;
-  height: 4.5rem;
+  width: 11%;
+  aspect-ratio: 1 /1;
   cursor: pointer;
+  font-size: clamp(0.6rem, 3vw, 1.25rem);
 }
 
 .test-replay > button:focus-visible {
@@ -82,6 +86,7 @@
 
 .stats-analysis-panel > .graph {
   display: none;
+  aspect-ratio: 52 / 23;
 }
 
 .stats-summary-panel > .show-n-slide,
@@ -102,6 +107,7 @@
 .stats-analysis-panel > button {
   order: 2;
   justify-self: center;
+  align-self: center;
 }
 
 @keyframes showAndSlideRight {
@@ -143,7 +149,7 @@
     align-content: space-between;
     height: 32rem;
     width: auto;
-    margin-bottom: 7rem;
+    margin-bottom: 4.5rem;
   }
 
   .previous-stats {
@@ -156,6 +162,7 @@
   }
 
   .stats-analysis-panel {
+    display: grid;
     grid-template-columns: 52rem minmax(0, 6.25rem);
   }
 
