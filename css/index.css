@@ -42,6 +42,10 @@ button {
   display: flex;
 }
 
+button {
+  font-size: clamp(0.5rem, 2.25vw, 0.9rem);
+}
+
 .btn-primary {
   color: var(--color-bg-panel);
   padding: 1.125em 4.5em;
