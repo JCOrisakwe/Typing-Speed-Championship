@@ -32,7 +32,6 @@ function endTest() {
     Math.round((correctFirstAttempts / highWaterMark) * 100) || 0;
   let errors = highWaterMark - correctFirstAttempts;
   let duration = formatTime(roundDuration * 60 - remainingSeconds);
-  clearInterval(timerInterval);
 
   document.dispatchEvent(
     new CustomEvent("testOver", {
@@ -85,7 +84,7 @@ function populateTextBox() {
     if (!wordEl.hasChildNodes() && isWhiteSpace(char)) continue;
 
     const charEl = document.createElement("span");
-    charEl.innerHTML = char.trim() || "&nbsp;"; // replace white space with non-breakable space
+    charEl.textContent = char.trim() || "\u00A0"; // replace white space with non-breakable space
     charEl.classList.add("char");
     chars.push(charEl);
 
@@ -127,6 +126,7 @@ function updateAccuracy() {
 }
 
 function updateStats() {
+  clearInterval(timerInterval);
   timerInterval = setInterval(() => {
     if (testPaused) return;
     updateTimer();
@@ -159,7 +159,7 @@ function handleTypingKeydown(e) {
   if (isValidKeystroke && currCharIdx < chars.length) {
     const currentEl = chars[currCharIdx];
     const isCorrect =
-      e.key === currentEl.innerText ||
+      e.key === currentEl.textContent ||
       isWhiteSpace(e.key, currentEl.textContent);
     totalKeystrokes += 1;
 
