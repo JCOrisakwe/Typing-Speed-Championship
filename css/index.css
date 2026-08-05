@@ -43,7 +43,7 @@ button {
 }
 
 button {
-  font-size: clamp(0.5rem, 2.25vw, 0.9rem);
+  font-size: clamp(0.725rem, 2.5vw, 0.85rem);
 }
 
 .btn-primary {
