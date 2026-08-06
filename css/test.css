@@ -13,7 +13,7 @@
   justify-content: center;
   align-items: center;
   background-color: #202f3699;
-  z-index: 1;
+  z-index: 100;
 }
 
 .countdown-modal {
@@ -125,6 +125,8 @@
   left: 0;
   right: 0;
   bottom: 0;
+  z-index: 2;
+  opacity: 0;
 }
 
 .text-box > div {
@@ -136,6 +138,7 @@
   padding: 0.38em 0.8em;
   scrollbar-width: none;
   overflow-wrap: break-word;
+  z-index: 1;
 }
 
 .text-box::-webkit-scrollbar {
