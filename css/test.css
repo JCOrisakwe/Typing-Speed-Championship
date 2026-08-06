@@ -111,20 +111,31 @@
 
 .text-box {
   position: relative;
-  padding: 0.38em 0.8em;
   font-size: clamp(0.85rem, 4vw, 1.075rem);
   line-height: 1.9em;
   width: min(100%, 36rem);
   height: 8.3rem;
   border: 2px solid var(--color-border);
   border-radius: 0.875rem;
-  overflow-y: auto;
-  scrollbar-width: none;
-  overflow-wrap: break-word;
 }
 
-.text-box-overlay {
+.text-box > input {
   position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.text-box > div {
+  height: 100%;
+  width: 100%;
+  scroll-behavior: smooth;
+  position: relative;
+  overflow-y: hidden;
+  padding: 0.38em 0.8em;
+  scrollbar-width: none;
+  overflow-wrap: break-word;
 }
 
 .text-box::-webkit-scrollbar {
