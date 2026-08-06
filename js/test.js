@@ -73,7 +73,7 @@ function initTest() {
   if (chars) chars[0].append(caret);
 }
 
-const textBox = document.querySelector(".text-box");
+const textBox = document.querySelector(".text-box > div");
 function populateTextBox() {
   chars = [];
   let wordEl = document.createElement("span");
@@ -145,61 +145,82 @@ function updateScroll(scrollup = true) {
   const lineHeight = Number(styles.lineHeight.replace("px", ""));
   const relativeTop = chars[currCharIdx].offsetTop - textBox.scrollTop;
 
-  if (scrollup && relativeTop > textBox.clientHeight) {
+  if (scrollup && relativeTop + lineHeight > textBox.clientHeight) {
     textBox.scrollTop += lineHeight;
-  } else if (!scrollup && textBox.clientHeight - relativeTop >= lineHeight) {
+  } else if (
+    !scrollup &&
+    textBox.clientHeight - relativeTop >= 2 * lineHeight
+  ) {
     textBox.scrollTop -= lineHeight;
   }
 }
 
-function handleTypingKeydown(e) {
+function handleValidUserInput(charTxt) {
+  const currentEl = chars[currCharIdx];
+  const isCorrect =
+    charTxt === currentEl.textContent ||
+    isWhiteSpace(charTxt, currentEl.textContent);
+  totalKeystrokes += 1;
+
+  currentEl.classList.add(isCorrect ? "correct-char" : "wrong-char");
+  if (isWhiteSpace(currentEl.textContent) && !isCorrect) {
+    currentEl.classList.add("wrong-space");
+  }
+
+  if (currCharIdx === highWaterMark && isCorrect) {
+    correctFirstAttempts += 1;
+    highWaterMark += 1;
+    correctKeystrokes += 1;
+  } else if (currCharIdx === highWaterMark) {
+    highWaterMark += 1;
+  } else if (isCorrect) {
+    correctKeystrokes += 1;
+  }
+
+  currCharIdx += 1;
+  updateAccuracy();
+
+  if (currCharIdx >= chars.length) return endTest();
+
+  updateScroll();
+  chars[currCharIdx].append(caret);
+}
+
+function handleBackspace() {
+  const prevElemIdx = Math.max(0, currCharIdx - 1);
+  const prevEl = chars[prevElemIdx];
+
+  if (!prevEl) return;
+
+  if (prevEl.classList.contains("correct-char")) correctKeystrokes -= 1;
+  prevEl.classList.remove("correct-char", "wrong-char", "wrong-space");
+
+  currCharIdx = prevElemIdx;
+  prevEl.append(caret);
+
+  updateScroll(false);
+  updateAccuracy();
+}
+
+function handleTypingKeydownEvent(e) {
   const isValidKeystroke =
     e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey;
 
   if (isValidKeystroke && currCharIdx < chars.length) {
-    const currentEl = chars[currCharIdx];
-    const isCorrect =
-      e.key === currentEl.textContent ||
-      isWhiteSpace(e.key, currentEl.textContent);
-    totalKeystrokes += 1;
-
-    currentEl.classList.add(isCorrect ? "correct-char" : "wrong-char");
-    if (isWhiteSpace(currentEl.textContent) && !isCorrect) {
-      currentEl.classList.add("wrong-space");
-    }
-
-    if (currCharIdx === highWaterMark && isCorrect) {
-      correctFirstAttempts += 1;
-      highWaterMark += 1;
-      correctKeystrokes += 1;
-    } else if (currCharIdx === highWaterMark) {
-      highWaterMark += 1;
-    } else if (isCorrect) {
-      correctKeystrokes += 1;
-    }
-
-    currCharIdx += 1;
-    updateAccuracy();
-
-    if (currCharIdx >= chars.length) return endTest();
-
-    updateScroll();
-    chars[currCharIdx].append(caret);
+    handleValidUserInput(e.key);
   } else if (e.key.toLowerCase() === "backspace") {
-    const prevElemIdx = Math.max(0, currCharIdx - 1);
-    const prevEl = chars[prevElemIdx];
-
-    if (!prevEl) return;
-
-    if (prevEl.classList.contains("correct-char")) correctKeystrokes -= 1;
-    prevEl.classList.remove("correct-char", "wrong-char", "wrong-space");
-
-    currCharIdx = prevElemIdx;
-    prevEl.append(caret);
-
-    updateScroll(false);
-    updateAccuracy();
+    handleBackspace();
   }
+}
+
+const textBoxOverlay = document.querySelector(".text-box > input");
+function handleTypingInputEvent(e) {
+  if (e.inputType === "deleteContentBackward") {
+    handleBackspace();
+  } else if (e.data) {
+    handleValidUserInput(e.data);
+  }
+  textBoxOverlay.value = "";
 }
 
 // ---------------- VIRTUAL KEYBOARD LAYOUT AND FUNCTIONALITY ----------------
@@ -308,12 +329,16 @@ document.addEventListener("startTest", initTest);
 
 document.addEventListener("keydown", (e) => {
   if (testPaused) return;
-  handleTypingKeydown(e);
+  handleTypingKeydownEvent(e);
   handleVirtualKeyboardKeydown(e);
 });
 
 document.addEventListener("keyup", (e) => {
   handleVirtualKeyboardKeyup(e);
+});
+
+textBoxOverlay.addEventListener("input", (e) => {
+  handleTypingInputEvent(e);
 });
 
 quitBtn.addEventListener("click", () => toggleConfirmModal());
