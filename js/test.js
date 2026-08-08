@@ -32,6 +32,7 @@ function endTest() {
     Math.round((correctFirstAttempts / highWaterMark) * 100) || 0;
   let errors = highWaterMark - correctFirstAttempts;
   let duration = formatTime(roundDuration * 60 - remainingSeconds);
+  textBoxOverlay.blur();
 
   document.dispatchEvent(
     new CustomEvent("testOver", {
@@ -49,7 +50,7 @@ function endTest() {
 }
 
 function initTest() {
-  roundDuration = 10;
+  roundDuration = 5;
   remainingSeconds = roundDuration * 60;
   correctKeystrokes = 0;
   correctFirstAttempts = 0;
@@ -70,6 +71,7 @@ function initTest() {
   updateAccuracy();
   populateTextBox();
   startCountDown();
+  textBoxOverlay.blur();
   if (chars) chars[0].append(caret);
 }
 
@@ -226,8 +228,8 @@ function handleTypingInputEvent(e) {
 // ---------------- VIRTUAL KEYBOARD LAYOUT AND FUNCTIONALITY ----------------
 const keyRows = document.querySelectorAll(".key-row");
 
-const getKeys = (e) => {
-  const keyText = CSS.escape(e.key.toLowerCase());
+const getKeys = (charTxt) => {
+  const keyText = CSS.escape(charTxt.toLowerCase());
   const elements = document.querySelectorAll(
     `[data-key-value-1='${keyText}'], [data-key-value-2='${keyText}']`,
   );
@@ -246,10 +248,27 @@ function syncCapsLockUI(e) {
   capsLockKey.classList.toggle("active", capsLockActive);
 }
 
-function handleVirtualKeyboardKeydown(e) {
-  syncCapsLockUI(e); // always check first, on every keydown
+function handleVirtualKeyboardInputEvent(e) {
+  const dataKey =
+    e.inputType === "deleteContentBackward" ? "backspace" : e.data;
+  if (!dataKey) return;
 
-  const { keyText, elements: keys } = getKeys(e);
+  const keys = getKeys(dataKey).elements;
+  if (!keys.length) return;
+
+  keys.forEach((key) => {
+    key.classList.add("active");
+    if (key.getAttribute("data-key-value-2") === dataKey)
+      key.classList.add("shift-char-active");
+  });
+  setTimeout(() => {
+    keys.forEach((key) => key.classList.remove("active", "shift-char-active"));
+  }, 200);
+}
+
+function handleVirtualKeyboardKeydownEvent(e) {
+  syncCapsLockUI(e);
+  const { keyText, elements: keys } = getKeys(e.key);
   if (!keys.length) return;
 
   e.preventDefault();
@@ -263,7 +282,7 @@ function handleVirtualKeyboardKeydown(e) {
 }
 
 function handleVirtualKeyboardKeyup(e) {
-  const { keyText, elements: keys } = getKeys(e);
+  const { keyText, elements: keys } = getKeys(e.key);
   if (!keys.length) return;
 
   e.preventDefault();
@@ -288,6 +307,7 @@ function startCountDown() {
   let intervalId = setInterval(() => {
     Num -= 1;
     if (Num < 0) {
+      textBoxOverlay.focus();
       clearInterval(intervalId);
       countdownModal.classList.remove("active");
       testPaused = false;
@@ -317,8 +337,12 @@ const toggleConfirmModal = (confirmModalThemeArg = "quit", show = true) => {
   testPaused = show;
   confirmModal.classList.toggle("active", show);
 
-  if (!show) return;
-
+  if (show) {
+    textBoxOverlay.blur();
+  } else {
+    textBoxOverlay.focus();
+    return;
+  }
   confirmModalThemeEls.forEach((el) => (el.textContent = confirmModalThemeArg));
   confirmModalTheme = confirmModalThemeArg;
 };
@@ -330,7 +354,7 @@ document.addEventListener("startTest", initTest);
 document.addEventListener("keydown", (e) => {
   if (testPaused) return;
   handleTypingKeydownEvent(e);
-  handleVirtualKeyboardKeydown(e);
+  handleVirtualKeyboardKeydownEvent(e);
 });
 
 document.addEventListener("keyup", (e) => {
@@ -338,7 +362,9 @@ document.addEventListener("keyup", (e) => {
 });
 
 textBoxOverlay.addEventListener("input", (e) => {
+  if (testPaused) return;
   handleTypingInputEvent(e);
+  handleVirtualKeyboardInputEvent(e);
 });
 
 quitBtn.addEventListener("click", () => toggleConfirmModal());
