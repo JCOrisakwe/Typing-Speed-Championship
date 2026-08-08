@@ -234,19 +234,23 @@
   text-transform: uppercase;
 }
 
+.shift-char-active,
 .shift-down .dual-char {
   color: var(--color-text-muted);
 }
 
+.shift-char-active span,
 .shift-down .dual-char span {
   color: var(--color-text-primary);
   font-size: 0.9em;
 }
 
+.shift-char-active.active,
 .shift-down .key.active.dual-char {
   color: var(--color-text-primary);
 }
 
+.shift-char-active.active span,
 .shift-down .key.active.dual-char span {
   color: var(--color-bg-panel);
 }
