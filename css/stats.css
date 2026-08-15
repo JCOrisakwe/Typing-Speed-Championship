@@ -26,7 +26,6 @@
 
 .previous-stats.active {
   opacity: 1;
-  cursor: pointer;
 }
 
 .stats-summary-panel > div {
@@ -75,7 +74,6 @@
   border-radius: 50%;
   width: 11%;
   aspect-ratio: 1 /1;
-  cursor: pointer;
   font-size: clamp(0.6rem, 3vw, 1.25rem);
 }
 
