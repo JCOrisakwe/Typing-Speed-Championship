@@ -10,7 +10,6 @@ let highWaterMark;
 let promptText;
 let wpm;
 let accuracy;
-let totalKeystrokes;
 let correctKeystrokes;
 let correctFirstAttempts;
 
@@ -49,22 +48,20 @@ function endTest() {
   );
 }
 
-function initTest() {
+function initTest(e) {
   roundDuration = 5;
   remainingSeconds = roundDuration * 60;
   correctKeystrokes = 0;
   correctFirstAttempts = 0;
   currCharIdx = 0;
   highWaterMark = 0;
-  totalKeystrokes = 0;
 
   textBox.scrollTop = 0;
   textBox.replaceChildren();
 
-  promptText = `Molestiae! consequuntur explicabo, vel at minus mollitia autem impedit alias
-  voluptas totam similique nihil temporibus aut. Quae veritatis ut iusto sequi, ad
-  sint provident aliquid facere expedita delectus magnam blanditiis
-  perspiciatis culpa harum laborum illo excepturi! Neque sunt incidunt omnis iste.`;
+  if (e?.detail?.promptText) {
+    promptText = e.detail.promptText;
+  }
 
   updateTimer();
   updateWPM();
@@ -162,7 +159,6 @@ function handleValidUserInput(charTxt) {
   const isCorrect =
     charTxt === currentEl.textContent ||
     isWhiteSpace(charTxt, currentEl.textContent);
-  totalKeystrokes += 1;
 
   currentEl.classList.add(isCorrect ? "correct-char" : "wrong-char");
   if (isWhiteSpace(currentEl.textContent) && !isCorrect) {
