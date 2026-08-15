@@ -55,7 +55,6 @@
   font-weight: 700;
   text-transform: uppercase;
   padding: 0 4.5em 1.125em;
-  cursor: pointer;
 }
 
 .test-screen__body {
@@ -93,7 +92,6 @@
 
 .test-screen__header .fa-xmark:hover,
 .test-screen__header .fa-xmark:focus-visible {
-  cursor: pointer;
   color: var(--color-text-primary);
 }
 
