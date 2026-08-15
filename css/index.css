@@ -1,6 +1,6 @@
 :root {
   /* Neutrals */
-  --color-bg-page: #f0f0f0;
+  --color-bg-page: #f0f1f3;
   --color-bg-panel: #ffffff;
   --color-border: #d8d8d8;
   --color-text-primary: #000000;
@@ -23,13 +23,21 @@
   padding: 0;
   border: none;
   background: none;
+  text-decoration: none;
 }
 
 html,
 input,
 textarea,
+select,
 button {
   font-family: "JetBrains Mono", monospace;
+  font-size: inherit;
+  letter-spacing: inherit;
+}
+
+button {
+  cursor: pointer;
 }
 
 .screen {
@@ -52,7 +60,6 @@ button {
   border-radius: 0.9em;
   text-transform: uppercase;
   background-color: var(--color-accent);
-  cursor: pointer;
 }
 
 .btn-primary:focus-visible {
