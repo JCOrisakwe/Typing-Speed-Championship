@@ -30,7 +30,7 @@ function endTest() {
   let trueAccuracy =
     Math.round((correctFirstAttempts / highWaterMark) * 100) || 0;
   let errors = highWaterMark - correctFirstAttempts;
-  let duration = formatTime(roundDuration * 60 - remainingSeconds);
+  let duration = formatTime(roundDuration - remainingSeconds);
   textBoxOverlay.blur();
 
   document.dispatchEvent(
@@ -49,8 +49,14 @@ function endTest() {
 }
 
 function initTest(e) {
-  roundDuration = 5;
-  remainingSeconds = roundDuration * 60;
+  if (e?.detail?.duration) {
+    roundDuration = e.detail.duration;
+  }
+  if (e?.detail?.promptText) {
+    promptText = e.detail.promptText;
+  }
+
+  remainingSeconds = roundDuration;
   correctKeystrokes = 0;
   correctFirstAttempts = 0;
   currCharIdx = 0;
@@ -58,10 +64,6 @@ function initTest(e) {
 
   textBox.scrollTop = 0;
   textBox.replaceChildren();
-
-  if (e?.detail?.promptText) {
-    promptText = e.detail.promptText;
-  }
 
   updateTimer();
   updateWPM();
@@ -111,7 +113,7 @@ function updateTimer() {
 // update wpm
 const wpmEl = document.querySelector("[data-current-stat='wpm']");
 function updateWPM() {
-  let elapsedMinutes = roundDuration - remainingSeconds / 60;
+  let elapsedMinutes = (roundDuration - remainingSeconds) / 60;
   wpm = Math.round(correctKeystrokes / (5 * elapsedMinutes));
   wpmEl.textContent = wpm || 0;
 }
@@ -205,8 +207,10 @@ function handleTypingKeydownEvent(e) {
     e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey;
 
   if (isValidKeystroke && currCharIdx < chars.length) {
+    e.preventDefault();
     handleValidUserInput(e.key);
   } else if (e.key.toLowerCase() === "backspace") {
+    e.preventDefault();
     handleBackspace();
   }
 }
