@@ -1,14 +1,16 @@
 .home-screen {
+  padding: 0 2.6%;
   letter-spacing: -0.125em;
   flex-direction: column;
   align-items: center;
-  background-color: var(----color-bg-page);
+  background-color: var(--color-bg-page);
 }
 
 header {
   width: min(100%, 96rem);
   display: grid;
   grid-template-columns: 1fr 1fr;
+  grid-template-rows: repeat(2, max-content) 2rem;
   row-gap: 2rem;
   margin: 1.5rem 0;
 }
@@ -21,6 +23,7 @@ h1 {
   font-family: "Moirai One";
 }
 
+.selected-tag-chip,
 .filter-control,
 .challenge-tile .tile-tag {
   padding: 0.5em 0.75em;
@@ -38,8 +41,8 @@ h1 {
 .challenge-filter {
   display: grid;
   grid-auto-flow: column;
-  grid-template-columns: repeat(2, minmax(auto, 13.5rem));
-  grid-template-rows: auto auto;
+  grid-template-columns: repeat(2, minmax(0, 13.5rem));
+  grid-template-rows: max-content max-content;
   column-gap: 2%;
   text-transform: uppercase;
   text-align: center;
@@ -51,8 +54,8 @@ select.filter-control > option {
 
 .featured-tags {
   display: grid;
-  grid-template-columns: repeat(5, auto);
-  grid-template-rows: auto auto;
+  grid-template-columns: repeat(5, max-content);
+  grid-template-rows: max-content max-content;
   column-gap: 1.3%;
   justify-content: flex-end;
 }
@@ -62,15 +65,44 @@ select.filter-control > option {
   font-size: 1rem;
   font-weight: 400;
   text-transform: uppercase;
+  margin-bottom: 0.25rem;
+}
+
+.featured-tags button {
+  font-size: clamp(13px, 4vw, 15px);
 }
 
 .featured-tags button.active {
   background-color: var(--color-accent);
   color: white;
 }
+
+.selected-tags {
+  grid-column: span 2;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+  order: 2;
+}
+
+.selected-tag-chip {
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+  background-color: var(--color-accent);
+  color: white;
+  font-size: 13px;
+  text-transform: uppercase;
+}
+
+.selected-tag-chip button {
+  color: white;
+}
+
 main {
   width: 100%;
-  padding: 3.125rem;
+  padding: 3rem 0;
   padding-top: 2rem;
   display: grid;
   grid-template-rows: max-content max-content;
@@ -84,13 +116,13 @@ main {
 .challenge-tile {
   font-size: 13px;
   height: 8.125rem;
-  padding: 1.5em 2em;
+  padding: 1.5em 3.6%;
   border-radius: 0.615em;
   border: 1px solid var(--color-text-primary);
-  background-color: var(----color-bg-panel);
+  background-color: var(--color-bg-panel);
   display: none;
   grid-auto-flow: column;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr max-content;
   grid-template-rows: repeat(3, 1fr);
 }
 
@@ -124,4 +156,44 @@ main {
 .challenge-tile .tile-tag {
   color: var(--color-bg-panel);
   background-color: var(--color-text-primary);
+}
+
+@media (max-width: 950px) {
+  h1 {
+    font-size: 2.5rem;
+  }
+
+  header {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(3, max-content) 2rem;
+    justify-items: center;
+  }
+
+  h1,
+  .selected-tags {
+    grid-column: 1;
+  }
+
+  .featured-tags > h2 {
+    text-align: center;
+  }
+
+  .challenge-filter {
+    order: 1;
+  }
+}
+
+@media (max-width: 480px) {
+  .featured-tags > button:last-of-type {
+    display: none;
+  }
+
+  .challenge-tile h2 {
+    text-align: center;
+  }
+
+  .challenge-tile > div {
+    justify-content: center;
+    align-items: center;
+  }
 }
