@@ -114,7 +114,7 @@ export const PROMPTS = [
     title: "Shipment #88213-B",
     tier: "Z/",
     tags: ["dialogue", "finance", "numbers"],
-    text: '"Confirm shipment #88213-B," the dispatcher read aloud, "Qty: 12 units @ $3.49/ea (=$41.88), plus 8.25% tax ($3.46) \u2014 total due: $45.34, payable by 11/30 \u2014 and, if it\'s not too much trouble, could someone finally fix the printer in Bay 6? It\'s been jamming since Tuesday, and frankly, nobody\'s had the patience (or the screwdriver) to deal with it properly."',
+    text: '"Confirm shipment #88213-B," the dispatcher read aloud, "Qty: 12 units @ $3.49/ea (=$41.88), plus 8.25% tax ($3.46) -- total due: $45.34, payable by 11/30 -- and, if it\'s not too much trouble, could someone finally fix the printer in Bay 6? It\'s been jamming since Tuesday, and frankly, nobody\'s had the patience (or the screwdriver) to deal with it properly."',
   },
   {
     id: "fj-4",
@@ -135,21 +135,21 @@ export const PROMPTS = [
     title: "He's Just Tired",
     tier: "WO",
     tags: ["dialogue"],
-    text: "\"I don't think that's what he meant,\" she whispered, glancing nervously toward the door. \"He's not angry \u2014 he's just tired, and he hasn't eaten since morning.\"",
+    text: "\"I don't think that's what he meant,\" she whispered, glancing nervously toward the door. \"He's not angry -- he's just tired, and he hasn't eaten since morning.\"",
   },
   {
     id: "qp-1",
     title: "The Ancient Manuscript",
     tier: "QP",
     tags: ["mystery"],
-    text: "The ancient manuscript (found, remarkably, in near-perfect condition) described a ritual so obscure that even the university's most seasoned archivists \u2014 normally unshakeable \u2014 admitted they'd never encountered anything quite like it before; naturally, the exhibit sold out within hours.",
+    text: "The ancient manuscript (found, remarkably, in near-perfect condition) described a ritual so obscure that even the university's most seasoned archivists -- normally unshakeable -- admitted they'd never encountered anything quite like it before; naturally, the exhibit sold out within hours.",
   },
   {
     id: "fr-4",
     title: "Protocol #7",
     tier: "Z/",
     tags: ["instructional", "all-caps", "numbers"],
-    text: 'DO NOT \u2014 under any circumstances \u2014 attempt to override Protocol #7 without written authorization (Form 22-C, signed & dated); violations, however minor, will be logged, reviewed, and reported to Compliance within 24 hrs., no exceptions, no appeals, and absolutely no "I didn\'t know" excuses accepted after 11:59 PM tonight.',
+    text: 'DO NOT -- under any circumstances -- attempt to override Protocol #7 without written authorization (Form 22-C, signed & dated); violations, however minor, will be logged, reviewed, and reported to Compliance within 24 hrs., no exceptions, no appeals, and absolutely no "I didn\'t know" excuses accepted after 11:59 PM tonight.',
   },
   {
     id: "sl-3",
@@ -177,7 +177,7 @@ export const PROMPTS = [
     title: "Season It Until It Scares You",
     tier: "QP",
     tags: ["dialogue", "food"],
-    text: 'The chef\'s philosophy was simple, if a little eccentric: "Season it until it scares you, then pull back exactly one pinch" \u2014 advice that, admittedly, took years of scorched sauces to fully appreciate.',
+    text: 'The chef\'s philosophy was simple, if a little eccentric: "Season it until it scares you, then pull back exactly one pinch" -- advice that, admittedly, took years of scorched sauces to fully appreciate.',
   },
   {
     id: "fj-3",
@@ -212,7 +212,7 @@ export const PROMPTS = [
     title: "Six Lines, Two All-Nighters",
     tier: "Z/",
     tags: ["code", "humor"],
-    text: 'function validate(input) { if (!input || input.length === 0) throw new Error("Empty input @ line 42!"); return input.trim().toLowerCase(); } \u2014 a six-line function, yet it took three engineers, two coffee-fueled all-nighters, and exactly 1 very awkward code review to finally get it right.',
+    text: 'function validate(input) { if (!input || input.length === 0) throw new Error("Empty input @ line 42!"); return input.trim().toLowerCase(); } -- a six-line function, yet it took three engineers, two coffee-fueled all-nighters, and exactly 1 very awkward code review to finally get it right.',
   },
   {
     id: "sl-2",
@@ -240,7 +240,7 @@ export const PROMPTS = [
     title: "The Tribunal's Ruling",
     tier: "QP",
     tags: ["legal", "formal"],
-    text: "Notwithstanding the ambiguity of the original clause, the tribunal concluded (somewhat reluctantly) that the defendant's obligation persisted \u2014 a decision that surprised almost nobody familiar with the judge's famously exacting interpretation of precedent.",
+    text: "Notwithstanding the ambiguity of the original clause, the tribunal concluded (somewhat reluctantly) that the defendant's obligation persisted -- a decision that surprised almost nobody familiar with the judge's famously exacting interpretation of precedent.",
   },
   {
     id: "fj-2",
@@ -268,14 +268,14 @@ export const PROMPTS = [
     title: "25% Off",
     tier: "10",
     tags: ["finance", "numbers"],
-    text: "The store is offering 25% off all items over $50, plus an additional 10% for members \u2014 bringing a $120 jacket down to roughly $81.",
+    text: "The store is offering 25% off all items over $50, plus an additional 10% for members -- bringing a $120 jacket down to roughly $81.",
   },
   {
     id: "fr-2",
     title: "Section 4.2, Subsection B",
     tier: "Z/",
     tags: ["legal", "formal"],
-    text: "Although the committee had, after considerable \u2014 and frankly exhausting \u2014 deliberation, agreed in principle to the proposal (Section 4.2, Subsection B), its implementation was delayed indefinitely by a series of minor, seemingly unrelated bureaucratic obstacles; notwithstanding the foregoing, the party of the first part shall retain all rights not expressly and unambiguously waived herein.",
+    text: "Although the committee had, after considerable -- and frankly exhausting -- deliberation, agreed in principle to the proposal (Section 4.2, Subsection B), its implementation was delayed indefinitely by a series of minor, seemingly unrelated bureaucratic obstacles; notwithstanding the foregoing, the party of the first part shall retain all rights not expressly and unambiguously waived herein.",
   },
   {
     id: "sl-1",
@@ -296,13 +296,48 @@ export const PROMPTS = [
     title: "Wet Paint",
     tier: "WO",
     tags: ["dialogue", "humor"],
-    text: 'The sign above the door read: "Wet Paint \u2014 Do Not Touch," which, naturally, was the first thing everyone reached out to check for themselves.',
+    text: 'The sign above the door read: "Wet Paint -- Do Not Touch," which, naturally, was the first thing everyone reached out to check for themselves.',
   },
   {
     id: "qp-2",
     title: "Disconnect the Power Supply",
     tier: "QP",
     tags: ["instructional", "all-caps"],
-    text: "WARNING: DO NOT ATTEMPT TO RECALIBRATE THE SENSOR WITHOUT FIRST DISCONNECTING THE POWER SUPPLY \u2014 failure to follow this procedure (even once) has, in prior incidents, resulted in irreversible damage to the primary unit.",
+    text: "WARNING: DO NOT ATTEMPT TO RECALIBRATE THE SENSOR WITHOUT FIRST DISCONNECTING THE POWER SUPPLY -- failure to follow this procedure (even once) has, in prior incidents, resulted in irreversible damage to the primary unit.",
   },
 ];
+
+// ---------- Duration estimation ----------
+
+const DURATION_ROUNDING_INTERVAL_SECONDS = 15;
+
+function countWords(text) {
+  return text.trim().split(/\s+/).filter(Boolean).length;
+}
+
+function estimateDurationSeconds(text, tier) {
+  const words = countWords(text);
+  const wpm = TIER_ASSUMED_WPM[tier];
+  const rawSeconds = (words / wpm) * 60;
+
+  const rounded =
+    Math.ceil(rawSeconds / DURATION_ROUNDING_INTERVAL_SECONDS) *
+    DURATION_ROUNDING_INTERVAL_SECONDS;
+
+  return Math.max(rounded, TIER_DURATION_FLOOR[tier]);
+}
+
+function formatDurationLabel(totalSeconds) {
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+
+  if (minutes === 0) return `${seconds}s`;
+  if (seconds === 0) return `${minutes} min`;
+  return `${minutes}:${String(seconds).padStart(2, "0")}`;
+}
+
+for (const prompt of PROMPTS) {
+  const seconds = estimateDurationSeconds(prompt.text, prompt.tier);
+  prompt.recommendedRoundDurationSeconds = seconds;
+  prompt.recommendedRoundDurationLabel = formatDurationLabel(seconds);
+}
