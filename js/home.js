@@ -5,6 +5,8 @@ const homeScreenEl = document.querySelector(".home-screen");
 // ---------- DOM references ----------
 const mainEl = homeScreenEl.querySelector("main");
 const headerEl = homeScreenEl.querySelector("header");
+const selectedTagsEl = homeScreenEl.querySelector("header .selected-tags");
+const removeTagTemplateEl = homeScreenEl.querySelector("#remove-tag-template");
 const challengeCountEl = homeScreenEl.querySelector("#challenges-found-count");
 const tagSelectEl = homeScreenEl.querySelector("#tag-filter-select");
 const tierSelectEl = homeScreenEl.querySelector("#tier-filter-select");
@@ -16,6 +18,7 @@ const challengeTileTemplateEl = homeScreenEl.querySelector(
 // ---------- State ----------
 const tilesByTag = {};
 const promptsById = {};
+const durationById = {};
 const activeTagFilters = new Set();
 let activeTierFilter = "";
 
@@ -41,6 +44,7 @@ function renderChallengeTiles() {
     tileEl.dataset.tier = prompt.tier;
     tileEl.dataset.promptId = prompt.id;
     promptsById[prompt.id] = prompt.text;
+    durationById[prompt.id] = prompt.recommendedRoundDurationSeconds;
     tileEl.querySelector("h2").textContent = prompt.title;
     tileEl.querySelector(".challenge-rank > span").textContent = prompt.tier;
     tileEl.querySelector(".challenge-duration > span").textContent =
@@ -76,7 +80,7 @@ function renderFilterDropdowns() {
   for (const tag of Object.keys(tilesByTag)) {
     const optionEl = document.createElement("option");
     optionEl.value = tag;
-    optionEl.textContent = tag;
+    optionEl.dataset.label = tag;
     tagSelectEl.appendChild(optionEl);
   }
 
@@ -86,6 +90,8 @@ function renderFilterDropdowns() {
     optionEl.textContent = tier;
     tierSelectEl.appendChild(optionEl);
   }
+
+  updateTagOptionLabels();
 }
 
 // ---------- Filtering ----------
@@ -110,6 +116,54 @@ function filterTiles() {
   updateChallengeCount();
 }
 
+function removeTagFilter(chipEl, tag) {
+  activeTagFilters.delete(tag);
+
+  const matchingButton = featuredTagsEl.querySelector(
+    `button[data-tag="${tag}"]`,
+  );
+
+  if (matchingButton) matchingButton.classList.remove("active");
+
+  chipEl.remove();
+  syncTagFilterUI();
+}
+
+function updateTagOptionLabels() {
+  tagSelectEl.querySelectorAll("option[value]").forEach((optionEl) => {
+    if (!optionEl.value) return; // skip placeholder
+    const isActive = activeTagFilters.has(optionEl.dataset.label);
+    optionEl.textContent = isActive
+      ? `✓ ${optionEl.dataset.label}`
+      : optionEl.dataset.label;
+  });
+}
+
+function renderSelectedTags() {
+  selectedTagsEl.innerHTML = "";
+  for (const tag of activeTagFilters) {
+    const chipEl = document.createElement("span");
+    chipEl.classList.add("selected-tag-chip");
+
+    const labelEl = document.createElement("span");
+    labelEl.textContent = tag;
+
+    const removeBtn = document.createElement("button");
+    removeBtn.type = "button";
+    removeBtn.dataset.parentTag = tag;
+    removeBtn.append(removeTagTemplateEl.content.cloneNode(true));
+
+    chipEl.append(labelEl, removeBtn);
+    selectedTagsEl.appendChild(chipEl);
+  }
+}
+
+function syncTagFilterUI() {
+  renderSelectedTags();
+  updateTagOptionLabels();
+  filterTiles();
+}
+
 // ---------- Init ----------
 renderChallengeTiles();
 renderFeaturedTags();
@@ -126,7 +180,7 @@ headerEl.addEventListener("click", (e) => {
   buttonEl.classList.toggle("active", isNowActive);
   isNowActive ? activeTagFilters.add(tag) : activeTagFilters.delete(tag);
 
-  filterTiles();
+  syncTagFilterUI();
 });
 
 mainEl.addEventListener("click", (e) => {
@@ -136,14 +190,14 @@ mainEl.addEventListener("click", (e) => {
 
   const tileEl = buttonEl.closest("section.challenge-tile");
   const promptText = promptsById[tileEl.dataset.promptId];
+  const duration = durationById[tileEl.dataset.promptId];
   document.dispatchEvent(
-    new CustomEvent("startTest", { detail: { promptText: promptText } }),
+    new CustomEvent("startTest", {
+      detail: { promptText: promptText, duration: duration },
+    }),
   );
 });
 
-// The tag <select> works as an "add one more tag" picker, on top of the
-// featured buttons -- picking a tag adds it to the filter set, then the
-// select resets to its placeholder so it can be used again.
 tagSelectEl.addEventListener("change", () => {
   const tag = tagSelectEl.value;
   if (!tag) return;
@@ -156,10 +210,16 @@ tagSelectEl.addEventListener("change", () => {
   );
   if (matchingButton) matchingButton.classList.add("active");
 
-  filterTiles();
+  syncTagFilterUI();
 });
 
 tierSelectEl.addEventListener("change", () => {
   activeTierFilter = tierSelectEl.value;
   filterTiles();
+});
+
+selectedTagsEl.addEventListener("click", (e) => {
+  const buttonEl = e.target.closest("button");
+  if (!buttonEl) return;
+  removeTagFilter(buttonEl.parentElement, buttonEl.dataset.parentTag);
 });
